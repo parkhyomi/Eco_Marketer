@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Digital_Contest</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    <string name="login_help_1">AI를 통해 간편하게 글 작성하고</string>
+    <string name="login_help_2">한 눈에 보이는 시세와 플렛폼 통계를 확인해요</string>
+    <string name="login_help_with_logo">간단하고 편리한 중고거래</string>
+    <string name="login_help_with_kakao">간편하게 로그인하여 시작해보아요!</string>
+
+</resources>
