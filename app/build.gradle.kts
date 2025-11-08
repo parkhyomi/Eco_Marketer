@@ -10,7 +10,6 @@ android {
     buildFeatures {
         // 뷰 바인딩 활성화
         viewBinding = true
-        //noinspection DataBindingWithoutKapt
         dataBinding = true
     }
 
@@ -90,6 +89,7 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    implementation("androidx.core:core-splashscreen:1.2.0") // 스플래시 의존성
 
     implementation ("androidx.compose.material:material:1.6.8")
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
