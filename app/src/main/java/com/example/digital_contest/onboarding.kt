@@ -50,7 +50,6 @@ import androidx.compose.ui.unit.Dp
 fun onboarding(viewModel: MainActivityViewModel, navController: NavController, modifier: Modifier = Modifier) {
     val scope = rememberCoroutineScope()
     val pagerState = rememberPagerState(pageCount = { 5 })
-    val context = LocalContext.current
 
     BoxWithConstraints(modifier=Modifier.fillMaxSize().background(Color.White)) {
         val screenHeight = maxHeight
@@ -139,8 +138,6 @@ fun onboarding(viewModel: MainActivityViewModel, navController: NavController, m
 @Composable
 fun onboarding1(screenWidth: Dp,screenHeight:Dp){
     val fontBold = FontFamily(Font(R.font.pretendard_bold))
-    val fontMedium = FontFamily(Font(R.font.pretendard_medium))
-    val fontSemiBold = FontFamily(Font(R.font.pretendard_semibold))
 
     Column(modifier= Modifier
         .fillMaxSize()
@@ -190,8 +187,6 @@ fun onboarding1(screenWidth: Dp,screenHeight:Dp){
 @Composable
 fun onboarding2(screenWidth: Dp,screenHeight: Dp){
     val fontBold = FontFamily(Font(R.font.pretendard_bold))
-    val fontMedium = FontFamily(Font(R.font.pretendard_medium))
-    val fontSemiBold = FontFamily(Font(R.font.pretendard_semibold))
 
     Column(modifier= Modifier
         .fillMaxSize()
@@ -239,8 +234,6 @@ fun onboarding2(screenWidth: Dp,screenHeight: Dp){
 @Composable
 fun onboarding3(screenWidth: Dp,screenHeight: Dp){
     val fontBold = FontFamily(Font(R.font.pretendard_bold))
-    val fontMedium = FontFamily(Font(R.font.pretendard_medium))
-    val fontSemiBold = FontFamily(Font(R.font.pretendard_semibold))
 
     Column(modifier= Modifier
         .fillMaxSize()
@@ -289,8 +282,6 @@ fun onboarding3(screenWidth: Dp,screenHeight: Dp){
 @Composable
 fun onboarding4(screenWidth: Dp,screenHeight: Dp){
     val fontBold = FontFamily(Font(R.font.pretendard_bold))
-    val fontMedium = FontFamily(Font(R.font.pretendard_medium))
-    val fontSemiBold = FontFamily(Font(R.font.pretendard_semibold))
 
     Column(modifier= Modifier
         .fillMaxSize()
@@ -338,8 +329,6 @@ fun onboarding4(screenWidth: Dp,screenHeight: Dp){
 @Composable
 fun onboarding5(screenWidth: Dp,screenHeight: Dp){
     val fontBold = FontFamily(Font(R.font.pretendard_bold))
-    val fontMedium = FontFamily(Font(R.font.pretendard_medium))
-    val fontSemiBold = FontFamily(Font(R.font.pretendard_semibold))
 
     Column(modifier= Modifier
         .fillMaxSize()

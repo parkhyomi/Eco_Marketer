@@ -1,9 +1,13 @@
-package com.example.digital_contest.API
+package com.example.digital_contest.API.Main
 
 import android.content.Context
 import android.util.Log
+import com.example.digital_contest.API.Login.LoginService
 import com.example.digital_contest.API.Manager.CountManager
 import com.example.digital_contest.API.Manager.TokenManager
+import com.example.digital_contest.API.RetrofitHelper
+import com.example.digital_contest.API.WriteService
+import com.example.digital_contest.API.colorDataResponse
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first

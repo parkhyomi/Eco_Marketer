@@ -20,8 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.res.ResourcesCompat
 import com.example.digital_contest.API.CompanyDetail
-import com.example.digital_contest.API.Statis.StatisDataStore
-import com.example.digital_contest.CustomBarChartRenderer
+import com.example.digital_contest.API.Data.StatisDataStore
 import com.example.digital_contest.R
 import com.github.mikephil.charting.animation.ChartAnimator
 import com.github.mikephil.charting.charts.BarChart

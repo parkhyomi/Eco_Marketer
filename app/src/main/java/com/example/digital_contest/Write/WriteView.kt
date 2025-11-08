@@ -1,4 +1,4 @@
-package com.example.digital_contest
+package com.example.digital_contest.Write
 
 
 import android.net.Uri
@@ -48,13 +48,11 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.ImeAction
 
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
-import com.example.digital_contest.API.IntroduceCreate
-import com.example.digital_contest.API.IntroduceDataStore
+import com.example.digital_contest.API.Intro.IntroduceCreate
+import com.example.digital_contest.API.Intro.IntroduceDataStore
 import kotlinx.coroutines.launch
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -86,12 +84,12 @@ import androidx.compose.material.AlertDialog
 import androidx.compose.material.TextButton
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.digital_contest.API.IntroDuceplus
+import com.example.digital_contest.API.Intro.IntroDuceplus
 import com.example.digital_contest.Viewmodel.MyPageViewModel
 import com.example.digital_contest.Dialog.LodingDialog
 import com.example.digital_contest.Dialog.PlatformDialog
+import com.example.digital_contest.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import okhttp3.MediaType.Companion.toMediaTypeOrNull

@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.dp
 
 import androidx.navigation.NavHostController
 import com.example.digital_contest.API.LoginBackendResponse
-import com.example.digital_contest.API.LoginService
+import com.example.digital_contest.API.Login.LoginService
 import com.example.digital_contest.API.RetrofitHelper
 import com.example.digital_contest.API.Manager.TokenManager
 import com.example.digital_contest.API.WriteService
@@ -53,9 +53,7 @@ import retrofit2.Call
 import retrofit2.Response
 import retrofit2.Retrofit
 
-
 @Composable
-
 fun LoginView(navHostController: NavHostController) {
     val context = LocalContext.current
     val tokenManager = TokenManager(context)

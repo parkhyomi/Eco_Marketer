@@ -1,4 +1,4 @@
-package com.example.digital_contest.API.Statis
+package com.example.digital_contest.API.Static
 
 import com.example.digital_contest.API.CategoryDetail
 import com.example.digital_contest.API.CategoryStatisResponse

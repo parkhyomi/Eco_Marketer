@@ -1,4 +1,4 @@
-package com.example.digital_contest
+package com.example.digital_contest.Chart
 
 import android.content.Context
 import androidx.compose.foundation.Image
@@ -58,20 +58,18 @@ import androidx.compose.ui.zIndex
 import com.example.digital_contest.API.CategoryData
 import com.example.digital_contest.API.CategoryDetail
 import com.example.digital_contest.API.CompanyData
-import com.example.digital_contest.API.Statis.StatisDataStore
-import com.example.digital_contest.API.Statis.callCategoryDetailStatis
-import com.example.digital_contest.API.Statis.callCategoryStatis
-import com.example.digital_contest.API.Statis.callPlatformDetailStatis
-import com.example.digital_contest.API.Statis.callPlatformStatis
-import com.example.digital_contest.Chart.my_danggun
-import com.example.digital_contest.Chart.my_test_chart
-import com.example.digital_contest.Chart.my_thunder
+import com.example.digital_contest.API.Data.StatisDataStore
+import com.example.digital_contest.API.Static.callCategoryDetailStatis
+import com.example.digital_contest.API.Static.callCategoryStatis
+import com.example.digital_contest.API.Static.callPlatformDetailStatis
+import com.example.digital_contest.API.Static.callPlatformStatis
+import com.example.digital_contest.R
 import com.example.digital_contest.ui.theme.Digital_ContestTheme
 
 
 @Composable
 fun StatsScreen() {
-    val image=R.drawable.chevron_down_1  //아래버튼
+    val image= R.drawable.chevron_down_1  //아래버튼
     val fontBold = Font(R.font.pretendard_bold)
     val fontMedium = Font(R.font.pretendard_medium)
 

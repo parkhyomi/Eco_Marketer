@@ -261,8 +261,7 @@ fun MarketResultItem(product: Map<String, Any>, screenWidth: Dp, screenHeight: D
 fun MarketTag(text: String, fontMedium: FontFamily, modifier: Modifier = Modifier) {
     val backgroundColor = getMarketBackgroundColor(text)
     val fontBold = FontFamily(Font(R.font.pretendard_bold))
-    val fontMedium = FontFamily(Font(R.font.pretendard_medium))
-    val fontSemiBold = FontFamily(Font(R.font.pretendard_semibold))
+
     Box(
         modifier = modifier
             .size(width = 58.dp, height = 22.dp)

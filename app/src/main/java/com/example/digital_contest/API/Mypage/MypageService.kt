@@ -1,5 +1,6 @@
-package com.example.digital_contest.API
+package com.example.digital_contest.API.Mypage
 
+import com.example.digital_contest.API.ProductData
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET

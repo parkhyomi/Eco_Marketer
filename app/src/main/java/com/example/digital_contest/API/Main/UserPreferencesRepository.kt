@@ -1,4 +1,4 @@
-package com.example.digital_contest.API
+package com.example.digital_contest.API.Main
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences

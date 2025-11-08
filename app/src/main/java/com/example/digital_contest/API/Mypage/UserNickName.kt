@@ -1,9 +1,13 @@
-package com.example.digital_contest.API
+package com.example.digital_contest.API.Mypage
 
 import android.content.Context
 import android.util.Log
+import com.example.digital_contest.API.Login.LoginService
 import com.example.digital_contest.API.Manager.TokenManager
 import com.example.digital_contest.API.Manager.UserManager
+import com.example.digital_contest.API.RetrofitHelper
+import com.example.digital_contest.API.UserName
+import com.example.digital_contest.API.WriteService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -14,7 +18,7 @@ import retrofit2.Retrofit
 
 fun UserNickName (context: Context){
     val retrofit:Retrofit = RetrofitHelper.getRetrofitInstance(WriteService::class.java)
-    val api :LoginService = retrofit.create(LoginService::class.java)
+    val api : LoginService = retrofit.create(LoginService::class.java)
     val tokenManager = TokenManager(context)
     val UserManager = UserManager(context)
 

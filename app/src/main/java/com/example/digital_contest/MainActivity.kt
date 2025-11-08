@@ -28,7 +28,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.digital_contest.Viewmodel.MyPageViewModel
 import com.example.digital_contest.Viewmodel.MyPageViewModelFactory
-import com.example.digital_contest.API.UserPreferencesRepository
+import com.example.digital_contest.API.Main.UserPreferencesRepository
+import com.example.digital_contest.Write.WriteView
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 

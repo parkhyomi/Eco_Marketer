@@ -1,6 +1,5 @@
-package com.example.digital_contest
+package com.example.digital_contest.Write
 
-import androidx.compose.runtime.Composable
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -20,6 +19,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,13 +30,18 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
-
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.digital_contest.R
+
+data class CategoryItem(
+    @DrawableRes val imageRes: Int,
+    val text: String
+)
 
 @Composable
-fun SaleConcept(
-    onConceptClick: (String) -> Unit,
+fun Category(
+    onItemClick: (String) -> Unit,
     onCloseClick: () -> Unit,
     titleTextStyle: TextStyle = TextStyle(
         fontSize = 20.sp,
@@ -51,14 +56,22 @@ fun SaleConcept(
         color = Color(0xFF000000)
     )
 ) {
-    val saleConceptItems = listOf(
-        CategoryItem(R.drawable.sale_icon1, "당근100도체"),
-        CategoryItem(R.drawable.sale_icon2, "둥글둥글체"),
-        CategoryItem(R.drawable.sale_icon3, "단호박체"),
-        CategoryItem(R.drawable.sale_icon4, "성냥팔이체"),
-        CategoryItem(R.drawable.sale_icon5, "귀욤체"),
-        CategoryItem(R.drawable.sale_icon6, "궁서체"),
-        CategoryItem(R.drawable.sale_icon7, "요점만체")
+    val categoryItems = listOf(
+        CategoryItem(R.drawable.icon1, "디지털 기기"),
+        CategoryItem(R.drawable.ticket_icon, "티켓/교환권"),
+        CategoryItem(R.drawable.icon3, "여성 패션/잡화"),
+        CategoryItem(R.drawable.icon4, "남성 패션/잡화"),
+        CategoryItem(R.drawable.icon5, "생활 가전"),
+        CategoryItem(R.drawable.icon6, "생활 주방"),
+        CategoryItem(R.drawable.icon7, "스포츠/레저"),
+        CategoryItem(R.drawable.icon8, "취미/게임/음악"),
+        CategoryItem(R.drawable.icon9, "뷰티/미용"),
+        CategoryItem(R.drawable.icon10, "식물"),
+        CategoryItem(R.drawable.icon11, "가공식품"),
+        CategoryItem(R.drawable.icon12, "건강기능식품"),
+        CategoryItem(R.drawable.icon13, "반려동물"),
+        CategoryItem(R.drawable.icon14, "도서"),
+        CategoryItem(R.drawable.icon15, "기타 중고")
     )
 
     BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
@@ -87,7 +100,7 @@ fun SaleConcept(
                     .padding(top = with(density) { (14.dp.toPx() * scaleFactor).toDp() }),
                 contentAlignment = Alignment.CenterStart
             ) {
-                Text("판매 컨셉", style = titleTextStyle.copy(
+                Text("카테고리", style = titleTextStyle.copy(
                     fontSize = with(density) { (20.sp.toPx() * scaleFactor).toSp() }
                 ))
                 Image(
@@ -103,20 +116,20 @@ fun SaleConcept(
 
             Spacer(modifier = Modifier.height(verticalSpacing))
 
-            repeat(3) { rowIndex ->
+            repeat(5) { rowIndex ->
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(itemSpacing)
                 ) {
-                    repeat(if (rowIndex < 2) 3 else 1) { columnIndex ->
+                    repeat(3) { columnIndex ->
                         val itemIndex = rowIndex * 3 + columnIndex
-                        if (itemIndex < saleConceptItems.size) {
-                            val item = saleConceptItems[itemIndex]
+                        if (itemIndex < categoryItems.size) {
+                            val item = categoryItems[itemIndex]
                             Box(
                                 modifier = Modifier
                                     .width(itemWidth)
                                     .aspectRatio(108f / 88f)
                                     .border(1.dp, Color.LightGray, RoundedCornerShape(8.dp))
-                                    .clickable { onConceptClick(item.text) },
+                                    .clickable { onItemClick(item.text) },
                                 contentAlignment = Alignment.Center
                             ) {
                                 Column(
@@ -133,15 +146,12 @@ fun SaleConcept(
                                     ))
                                 }
                             }
-                        } else if (rowIndex == 2) {
+                        } else {
                             Spacer(modifier = Modifier.width(itemWidth))
                         }
                     }
-                    if (rowIndex == 2) {
-                        Spacer(modifier = Modifier.weight(2f))
-                    }
                 }
-                if (rowIndex < 2) {
+                if (rowIndex < 4) {
                     Spacer(modifier = Modifier.height(verticalSpacing))
                 }
             }
@@ -151,10 +161,10 @@ fun SaleConcept(
 
 @Preview(showBackground = true)
 @Composable
-fun SaleConceptPreview() {
+fun CategoryPreview() {
 
-    SaleConcept(
-        onConceptClick = {},  // 빈 람다 함수를 전달
+    Category(
+        onItemClick = {},  // 빈 람다 함수를 전달
         onCloseClick = {}
     )
 }

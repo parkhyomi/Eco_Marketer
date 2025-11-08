@@ -7,8 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.digital_contest.API.Manager.MyPageManager
-import com.example.digital_contest.API.MyPageProduct
-import com.example.digital_contest.API.ProductStatus
+import com.example.digital_contest.API.Mypage.MyPageProduct
+import com.example.digital_contest.API.Mypage.ProductStatus
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

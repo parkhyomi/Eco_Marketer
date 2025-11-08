@@ -1,4 +1,4 @@
-package com.example.digital_contest.API
+package com.example.digital_contest.API.Intro
 
 import android.content.Context
 import android.util.Log
@@ -8,9 +8,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
 
 class IntroduceDataStore(private val context: Context) {
     companion object{//글쓰기 api호출시 생성되는 자동글을 여기에 작성.

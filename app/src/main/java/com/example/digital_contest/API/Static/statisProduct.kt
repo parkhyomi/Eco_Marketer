@@ -1,7 +1,8 @@
-package com.example.digital_contest.API.Statis
+package com.example.digital_contest.API.Static
 
 import android.content.Context
 import android.util.Log
+import com.example.digital_contest.API.Data.StatisDataStore
 import com.example.digital_contest.API.Manager.TokenManager
 import com.example.digital_contest.API.RetrofitHelper
 import com.example.digital_contest.API.WriteService

@@ -1,4 +1,4 @@
-package com.example.digital_contest.API.Statis
+package com.example.digital_contest.API.Data
 
 import android.content.Context
 import android.util.Log

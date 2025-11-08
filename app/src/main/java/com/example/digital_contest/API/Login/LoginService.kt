@@ -1,5 +1,10 @@
-package com.example.digital_contest.API
+package com.example.digital_contest.API.Login
 
+import com.example.digital_contest.API.LevelExperience
+import com.example.digital_contest.API.LoginBackendResponse
+import com.example.digital_contest.API.UserName
+import com.example.digital_contest.API.colorDataResponse
+import com.example.digital_contest.API.tradeDataResponse
 import retrofit2.http.POST
 import retrofit2.Call
 import retrofit2.http.DELETE

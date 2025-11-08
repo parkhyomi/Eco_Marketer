@@ -1,9 +1,11 @@
-package com.example.digital_contest.API
+package com.example.digital_contest.API.Mypage
 
 import android.content.Context
 import android.util.Log
 import com.example.digital_contest.API.Manager.MyPageManager
 import com.example.digital_contest.API.Manager.TokenManager
+import com.example.digital_contest.API.RetrofitHelper
+import com.example.digital_contest.API.WriteService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Retrofit

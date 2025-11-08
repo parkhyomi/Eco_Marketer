@@ -75,12 +75,12 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
-import com.example.digital_contest.API.LeverExperience
+import com.example.digital_contest.API.Mypage.LeverExperience
 import com.example.digital_contest.API.Manager.MyPageManager
 import com.example.digital_contest.Viewmodel.MyPageViewModel
 import com.example.digital_contest.API.Manager.TokenManager
 import com.example.digital_contest.API.Manager.UserManager
-import com.example.digital_contest.API.UserNickName
+import com.example.digital_contest.API.Mypage.UserNickName
 import com.example.digital_contest.ui.theme.Digital_ContestTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -102,16 +102,10 @@ fun MyPageScreen(navHostController: NavHostController,modifier: Modifier = Modif
         UserNickName(context)
     }
 
-    //Log.i("상품 불러오기","$products")
     Log.i("상품 수","$productCount")
-
-
 
     val fontBold = FontFamily(Font(R.font.pretendard_bold))
     val fontMedium = FontFamily(Font(R.font.pretendard_medium))
-    val fontSemiBold = FontFamily(Font(R.font.pretendard_semibold))
-
-
     val userManager = remember { UserManager(context) }
     val userData = userManager.nickname.collectAsState(initial = "사용자")
 
@@ -221,22 +215,11 @@ fun MyPageScreen(navHostController: NavHostController,modifier: Modifier = Modif
 @Composable
 fun MyPageMiddle(viewModel: MyPageViewModel =viewModel()) {
     val context= LocalContext.current
-    val myPageManager=remember{ MyPageManager(context) }
-
-    val tabss=listOf("판매중" to null,"판매완료" to true,"판매실패" to false)
     val tabs = listOf("판매중", "판매완료", "판매실패")
 
 
     var selectedTabIndex by remember { mutableStateOf(0) }
-
-    val pagerState = rememberPagerState { tabss.size }
-    val coroutineScope = rememberCoroutineScope()
-
-
-    val fontSemiBold = FontFamily(Font(R.font.pretendard_semibold))
-    val fontRegular = FontFamily(Font(R.font.pretendard_regular))
     val fontemibold = FontFamily(Font(R.font.pretendard_semibold))
-    var products by remember { mutableStateOf<List<Map<String, Any>>>(emptyList()) }
 
     val onSaleProducts by viewModel.onSaleProducts.collectAsState()
     val completedProduts by viewModel.completedProducts.collectAsState()

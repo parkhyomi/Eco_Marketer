@@ -1,4 +1,4 @@
-package com.example.digital_contest
+package com.example.digital_contest.Chart
 
 import android.graphics.Color
 import android.graphics.Typeface
@@ -13,8 +13,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.res.ResourcesCompat
-import com.example.digital_contest.API.CategoryData
 import com.example.digital_contest.API.CategoryDetail
+import com.example.digital_contest.R
 import com.github.mikephil.charting.animation.ChartAnimator
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.XAxis
@@ -24,7 +24,7 @@ import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 
 @Composable
-fun CategoryChart(category: String, categoryDetail: CategoryDetail) {
+fun my_CategoryChart(category: String, categoryDetail: CategoryDetail) {
     val context = LocalContext.current
     val categoryData = remember(category, categoryDetail) {
         categoryDetail.data.find { it.target == category }

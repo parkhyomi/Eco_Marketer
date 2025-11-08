@@ -4,10 +4,10 @@ import kotlinx.serialization.Serializable
 
 // 로그인 토큰 받기
 data class LoginBackendResponse(
-    val data: Data
+    val data: data
 )
 
-data class Data(
+data class data(
     val accessToken: String,
     val refreshToken: String,
     val role: String

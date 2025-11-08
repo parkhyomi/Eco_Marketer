@@ -1,4 +1,4 @@
-package com.example.digital_contest
+package com.example.digital_contest.Chart
 
 import android.graphics.Canvas
 import android.graphics.Path
@@ -7,7 +7,6 @@ import com.github.mikephil.charting.animation.ChartAnimator
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import com.github.mikephil.charting.renderer.BarChartRenderer
-import com.github.mikephil.charting.utils.Utils
 import com.github.mikephil.charting.utils.ViewPortHandler
 
 class CustomBarChartRenderer(

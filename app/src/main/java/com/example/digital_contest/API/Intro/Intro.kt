@@ -1,8 +1,10 @@
-package com.example.digital_contest.API
+package com.example.digital_contest.API.Intro
 
 import android.content.Context
 import android.util.Log
 import com.example.digital_contest.API.Manager.TokenManager
+import com.example.digital_contest.API.RetrofitHelper
+import com.example.digital_contest.API.WriteService
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
