@@ -1,3 +1,4 @@
+/*
 package com.example.digital_contest.Chart
 
 import com.example.digital_contest.API.Data.StatisDataStore
@@ -129,3 +130,4 @@ fun my_test_chart() {
         }
     }
 }
+*/

@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -24,19 +23,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-
 import androidx.compose.foundation.layout.widthIn
-
 import androidx.compose.material3.Icon
-
 import androidx.compose.material3.NavigationBar
-
 import androidx.compose.material3.Scaffold
-
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -44,7 +37,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
-
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
@@ -61,16 +53,16 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.digital_contest.API.Manager.CountManager
-import com.example.digital_contest.API.Manager.LevelManager
-import com.example.digital_contest.API.Mypage.LeverExperience
-import com.example.digital_contest.API.Login.LoginService
+//import com.example.digital_contest.API.Manager.CountManager
+//import com.example.digital_contest.API.Manager.LevelManager
+//import com.example.digital_contest.API.Mypage.LeverExperience
+//import com.example.digital_contest.API.Login.LoginService
 import com.example.digital_contest.Viewmodel.MyPageViewModel
-import com.example.digital_contest.API.RetrofitHelper
-import com.example.digital_contest.API.Manager.TokenManager
-import com.example.digital_contest.API.Main.UtilModel
-import com.example.digital_contest.API.WriteService
-import com.example.digital_contest.API.tradeDataResponse
+//import com.example.digital_contest.API.RetrofitHelper
+//import com.example.digital_contest.API.Manager.TokenManager
+//import com.example.digital_contest.API.Main.UtilModel
+//import com.example.digital_contest.API.WriteService
+//import com.example.digital_contest.API.tradeDataResponse
 import com.example.digital_contest.Chart.StatsScreen
 import com.example.digital_contest.Write.WriteView
 import com.example.digital_contest.ui.theme.Digital_ContestTheme
@@ -93,15 +85,15 @@ fun MainContent(navHostController: NavHostController,myPageViewModel: MyPageView
     val fontRegular = Font(R.font.pretendard_regular)
     val fontSemiBold = Font(R.font.pretendard_semibold)
 
-    val LevelManager = remember { LevelManager(context) }
-    val countManager = remember { CountManager(context) }
+//    val LevelManager = remember { LevelManager(context) }
+//    val countManager = remember { CountManager(context) }
     val showBottomBar = remember { mutableStateOf(true) }
-    val countData = countManager.count.collectAsState(initial = 0)
-    val myexperience = LevelManager.myExperience.collectAsState(initial = 0)
-    val levelexperience = LevelManager.levelExperience.collectAsState(initial = 0)
-    val mylevel = LevelManager.myLevel.collectAsState(initial = 0)
-    val progress = myexperience.value.toFloat() / levelexperience.value.toFloat()
-    Log.i("TAG", "$progress")
+//    val countData = countManager.count.collectAsState(initial = 0)
+//    val myexperience = LevelManager.myExperience.collectAsState(initial = 0)
+//    val levelexperience = LevelManager.levelExperience.collectAsState(initial = 0)
+//    val mylevel = LevelManager.myLevel.collectAsState(initial = 0)
+//    val progress = myexperience.value.toFloat() / levelexperience.value.toFloat()
+//    Log.i("TAG", "$progress")
 
     var lastClickTime = 0L
 
@@ -115,8 +107,8 @@ fun MainContent(navHostController: NavHostController,myPageViewModel: MyPageView
 
     LaunchedEffect(Unit) {
         tradeData(context)
-        LeverExperience(context)
-        UtilModel(context)
+//        LeverExperience(context)
+//        UtilModel(context)
         myPageViewModel.loadAndSortAllProducts()
         //myPageViewModel.sortProductsByIdAscending()
     }
