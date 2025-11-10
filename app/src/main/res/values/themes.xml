@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <resources>
-    <style name="Theme.Digital_Contest" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.Digital_Contest" parent="android:Theme.Material.Light.NoActionBar"/>
+    <style name="Theme.Digital_Contest.SplashScreen" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/white</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/eco_marketer_logo1</item>
+        <item name="windowSplashScreenAnimationDuration">2000</item>
+    </style>
     <style name="Theme.Digital_Contest.NoActionBar" parent="android:Theme.Material.Light.NoActionBar"/>
 </resources>
