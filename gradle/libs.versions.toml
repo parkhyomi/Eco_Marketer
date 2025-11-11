@@ -1,7 +1,7 @@
 [versions]
 datastorePreferences="1.1.1"
 kakao="2.20.3"
-agp = "8.5.1"
+agp = "8.6.0"
 dotsindicator = "5.0"
 kotlin = "1.9.0"
 coreKtx = "1.13.1"
@@ -15,7 +15,7 @@ constraintlayout = "2.1.4"
 navigationCompose="2.7.7"
 viewpager2 = "1.1.0"
 appcompat = "1.7.0"
-databindingRuntime = "8.5.1"
+databindingRuntime = "8.6.0"
 kotlinx-serialization = "1.5.0"
 roomKtx = "2.6.1"
 
