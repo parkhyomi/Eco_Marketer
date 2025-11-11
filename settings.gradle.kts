@@ -16,9 +16,9 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven {
-            url = uri("https://devrepo.kakao.com/nexus/content/groups/public/")
-        }
+        //카카오 SDK
+        maven { url = java.net.URI("https://devrepo.kakao.com/nexus/content/groups/public/") }
+        //아이콘
         maven { url = uri("https://jitpack.io") }
     }
 }
