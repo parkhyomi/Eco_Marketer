@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.digital_contest">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <!--이아래 부분이 인터넷 사용권한(카카오)-->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -27,7 +26,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Digital_Contest">
+        android:theme="@style/Theme.Digital_Contest.SplashScreen">
 
         <!-- FileProvider 설정 추가 -->
         <provider

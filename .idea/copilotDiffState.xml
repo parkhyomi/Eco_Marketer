@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CopilotDiffPersistence">
+    <option name="pendingDiffs">
+      <map>
+        <entry key="$PROJECT_DIR$/app/src/main/res/drawable/splash_icon_sized.xml">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/app/src/main/res/drawable/splash_icon_sized.xml" />
+              <option name="originalContent" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;&#10;&lt;layer-list xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;&gt;&#10;    &lt;!-- 아이콘 크기 조절: width와 height를 원하는 크기로 변경하세요 (예: 120dp, 150dp, 200dp, 300dp 등) --&gt;&#10;    &lt;item&#10;        android:width=&quot;200dp&quot;&#10;        android:height=&quot;200dp&quot;&#10;        android:drawable=&quot;@drawable/eco_marketer_logo1&quot;&#10;        android:gravity=&quot;center&quot; /&gt;&#10;&lt;/layer-list&gt;&#10;" />
+              <option name="updatedContent" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;&#10;&lt;layer-list xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;&gt;&#10;    &lt;!-- 아이콘 크기 조절: width와 height를 원하는 크기로 변경하세요 (예: 120dp, 150dp, 200dp, 300dp 등) --&gt;&#10;    &lt;item&#10;        android:width=&quot;200dp&quot;&#10;        android:height=&quot;200dp&quot;&#10;        android:drawable=&quot;@drawable/eco_marketer_logo1&quot;&#10;        android:gravity=&quot;center&quot; /&gt;&#10;&lt;/layer-list&gt;&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/res/values/themes.xml">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/app/src/main/res/values/themes.xml" />
+              <option name="originalContent" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;&#10;&#10;&lt;resources&gt;&#10;    &lt;style name=&quot;Theme.Digital_Contest&quot; parent=&quot;android:Theme.Material.Light.NoActionBar&quot;/&gt;&#10;    &lt;style name=&quot;Theme.Digital_Contest.SplashScreen&quot; parent=&quot;Theme.SplashScreen&quot;&gt;&#10;        &lt;item name=&quot;windowSplashScreenBackground&quot;&gt;@color/white&lt;/item&gt;&#10;        &lt;item name=&quot;windowSplashScreenAnimatedIcon&quot;&gt;@drawable/splash_icon_sized&lt;/item&gt;&#10;        &lt;item name=&quot;windowSplashScreenAnimationDuration&quot;&gt;2000&lt;/item&gt;&#10;        &lt;item name=&quot;postSplashScreenTheme&quot;&gt;@style/Theme.Digital_Contest&lt;/item&gt;&#10;    &lt;/style&gt;&#10;    &lt;style name=&quot;Theme.Digital_Contest.NoActionBar&quot; parent=&quot;android:Theme.Material.Light.NoActionBar&quot;/&gt;&#10;&lt;/resources&gt;" />
+              <option name="updatedContent" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;&#10;&#10;&lt;resources&gt;&#10;    &lt;style name=&quot;Theme.Digital_Contest&quot; parent=&quot;android:Theme.Material.Light.NoActionBar&quot;/&gt;&#10;    &lt;style name=&quot;Theme.Digital_Contest.SplashScreen&quot; parent=&quot;Theme.SplashScreen&quot;&gt;&#10;        &lt;item name=&quot;windowSplashScreenBackground&quot;&gt;@color/white&lt;/item&gt;&#10;        &lt;item name=&quot;windowSplashScreenAnimatedIcon&quot;&gt;@drawable/splash_icon_sized&lt;/item&gt;&#10;        &lt;item name=&quot;windowSplashScreenAnimationDuration&quot;&gt;2000&lt;/item&gt;&#10;        &lt;item name=&quot;postSplashScreenTheme&quot;&gt;@style/Theme.Digital_Contest&lt;/item&gt;&#10;    &lt;/style&gt;&#10;    &lt;style name=&quot;Theme.Digital_Contest.NoActionBar&quot; parent=&quot;android:Theme.Material.Light.NoActionBar&quot;/&gt;&#10;&lt;/resources&gt;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
