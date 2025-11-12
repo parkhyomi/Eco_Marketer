@@ -70,18 +70,6 @@ class MainActivity : ComponentActivity() {
 //                Surface(modifier = Modifier.fillMaxSize()) {
 //                    val navController = rememberNavController()
 //
-//                    NavHost(
-//                        navController = navController,
-//                        startDestination = "splash"
-//                    ) {//StatisTest(viewModel: StatisViewModel)
-//                        //MainContent(navHostController = navController, myPageViewModel)
-//                        composable("splash") { SplashView(navController, viewModel) }
-//                        composable("main") { MainContent(navHostController = navController, myPageViewModel) }
-//                        composable("login") { LoginView(navController) }
-//                        composable("onboarding") { onboarding(viewModel, navController) }
-//                        composable("write") { WriteView(navController,viewModel=myPageViewModel) }
-//                    }
-//                }
 //            }
 //        }
 //    }
