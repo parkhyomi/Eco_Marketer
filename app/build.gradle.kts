@@ -104,7 +104,7 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-    
+
     implementation("androidx.core:core-splashscreen:1.2.0") // 스플래시 의존성
     implementation(libs.androidx.navigation.compose)// 네비게이션 의존성
 
