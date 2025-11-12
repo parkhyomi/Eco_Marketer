@@ -96,7 +96,6 @@ dependencies {
     implementation(libs.androidx.viewpager2)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.databinding.runtime)
-    implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.room.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -105,13 +104,14 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    
     implementation("androidx.core:core-splashscreen:1.2.0") // 스플래시 의존성
+    implementation(libs.androidx.navigation.compose)// 네비게이션 의존성
 
     implementation ("androidx.compose.material:material:1.6.8")
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
     implementation ("io.coil-kt:coil:2.2.2")
     implementation ("io.coil-kt:coil-compose:2.2.2")
-    implementation("androidx.navigation:navigation-compose:2.7.7")
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
     implementation("com.squareup.retrofit2:converter-gson:2.11.0")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
