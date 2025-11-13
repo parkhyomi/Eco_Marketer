@@ -1,17 +1,7 @@
-//package com.example.digital_contest.API
-//
-//import kotlinx.serialization.Serializable
-//
-//// 로그인 토큰 받기
-//data class LoginBackendResponse(
-//    val data: data
-//)
-//
-//data class data(
-//    val accessToken: String,
-//    val refreshToken: String,
-//    val role: String
-//)
+package com.example.digital_contest.API
+
+import kotlinx.serialization.Serializable
+
 //
 //// 거래 횟수 데이터 응답을 위한 데이터 클래스
 //data class tradeDataResponse(

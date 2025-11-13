@@ -35,3 +35,25 @@
 //    ):Call<CategoryDetail>
 //
 //}
+
+////거래 횟수 조회에 대한 API 연결
+//@GET("/api/level/secondhand-trade/count")
+//fun getTradeCountData(
+//    @Header("Authorization") accessToken: String
+//): Call<tradeDataResponse>
+//
+////레벨 및 경험치에 대한 API 연결
+//@GET("/api/level/information")
+//fun levelexperience(
+//    @Header("Authorization") accessToken: String
+//): Call<LevelExperience>
+//
+//@GET("/api/level/color")
+//fun getlevelcolor(
+//    @Header("Authorization") accessToken: String
+//): Call<colorDataResponse>
+//
+//@GET("/api/user/nickname")
+//fun username(
+//    @Header("Authorization")accessToken : String
+//): Call<UserName>
