@@ -1,4 +1,4 @@
-package com.example.digital_contest
+package com.example.digital_contest.onboarding
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
@@ -27,31 +28,15 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.digital_contest.onboarding.OnboardingPageData
-import com.example.digital_contest.onboarding.OnboardingViewModel
-import com.example.digital_contest.onboarding.getOnboardingPages
+import com.example.digital_contest.R
 import kotlinx.coroutines.launch
 
-/**
- * Onboarding 메인 화면
- *
- * 적용된 OOP & SOLID 원칙:
- * 1. SRP (단일 책임): UI 렌더링만 담당, 비즈니스 로직은 ViewModel에
- * 2. OCP (개방-폐쇄): 페이지 추가 시 데이터만 추가하면 됨
- * 3. DIP (의존성 역전): ViewModel을 주입받아 사용
- *
- * @param navController 화면 전환용
- * @param viewModel 온보딩 로직 관리 (의존성 주입)
- */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Onboarding(
-    navController: NavController,
-    viewModel: OnboardingViewModel = viewModel()
 ) {
     val pages = getOnboardingPages()
     val pagerState = rememberPagerState(pageCount = { pages.size })
-    val scope = rememberCoroutineScope()
 
     BoxWithConstraints(
         modifier = Modifier
@@ -85,16 +70,10 @@ fun Onboarding(
                 )
             }
 
-            // 시작 버튼 (첫 페이지가 아닐 때만)
-            if (pagerState.currentPage != 0) {
+            if (pagerState.currentPage == pages.size - 1) {
                 Button(
                     onClick = {
-                        scope.launch {
-                            viewModel.saveOnboardingCompleted()
-                        }
-                        navController.navigate("Login") {
-                            popUpTo("onboarding") { inclusive = true }
-                        }
+
                     },
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
@@ -102,7 +81,8 @@ fun Onboarding(
                         .height(40.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color(0xFF14AE5C)
-                    )
+                    ),
+                    shape = RoundedCornerShape(10.dp)
                 ) {
                     Text("시작하기")
                 }
@@ -111,11 +91,6 @@ fun Onboarding(
     }
 }
 
-/**
- * 페이지 인디케이터 컴포넌트
- *
- * SRP: 페이지 인디케이터 표시만 담당
- */
 @Composable
 private fun PageIndicator(
     currentPage: Int,
@@ -152,12 +127,6 @@ private fun PageIndicator(
     }
 }
 
-/**
- * 개별 온보딩 페이지 컴포넌트
- *
- * SRP: 단일 페이지 렌더링만 담당
- * OCP: OnboardingPageData를 받아서 확장 가능
- */
 @Composable
 private fun OnboardingPage(
     pageData: OnboardingPageData,
@@ -181,12 +150,10 @@ private fun OnboardingPage(
         ) {
             Spacer(modifier = Modifier.height(screenHeight * 0.072f))
 
-            // 타이틀
             Text(
                 text = pageData.title,
                 color = pageData.titleColor,
                 fontSize = with(LocalDensity.current) {
-                    // 마지막 페이지는 폰트 조금 작게
                     (screenWidth * if (isLastPage) 0.058f else 0.064f).toSp()
                 },
                 lineHeight = with(LocalDensity.current) {
@@ -198,7 +165,6 @@ private fun OnboardingPage(
 
             Spacer(modifier = Modifier.height(screenHeight * 0.047f))
 
-            // 설명
             Text(
                 text = pageData.description,
                 fontSize = with(LocalDensity.current) {
