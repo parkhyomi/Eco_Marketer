@@ -1,5 +1,6 @@
 package com.example.digital_contest.Login
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -13,25 +14,71 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.NavOptions
 import com.example.digital_contest.R
+import kotlinx.coroutines.launch
+
 @Composable
 fun LoginView(
+    navController: NavController,
+    viewModel: LoginViewModel = viewModel(factory = LoginViewModelFactory())
 ) {
+    val context = LocalContext.current
+    val uiState by viewModel.uiState.collectAsState()
+    val authDataStore = AuthDataStore(context)
+    val scope = rememberCoroutineScope()
+
+    // UI 상태 처리
+    LaunchedEffect(uiState) {
+        when (val state = uiState) {
+            is LoginUiState.Success -> {
+                // 로그인 성공 - 토큰 저장 후 메인 화면으로 이동
+                scope.launch {
+                    authDataStore.saveLoginData(
+                        accessToken = state.loginData.accessToken,
+                        refreshToken = state.loginData.refreshToken,
+                        role = state.loginData.role
+                    )
+                    Toast.makeText(context, "로그인 성공!", Toast.LENGTH_SHORT).show()
+                    // 메인 화면으로 이동
+                    navController.navigate("main", NavOptions.Builder()
+                        .setPopUpTo("login", inclusive = true)
+                        .build()
+                    )
+                }
+            }
+            is LoginUiState.Error -> {
+                Toast.makeText(context, state.message, Toast.LENGTH_LONG).show()
+                viewModel.resetUiState()
+            }
+            else -> {}
+        }
+    }
+
     LoginContent(
-        onKakaoLoginClick = {  }
+        uiState = uiState,
+        onKakaoLoginClick = { viewModel.loginWithKakao(context) }
     )
 }
 
 @Composable
 private fun LoginContent(
+    uiState: LoginUiState,
     onKakaoLoginClick: () -> Unit
 ) {
     Box(
@@ -82,6 +129,7 @@ private fun LoginContent(
                     painter = painterResource(id = R.drawable.kakao_login),
                     contentDescription = "카카오 로그인",
                     modifier = Modifier.clickable(
+                        enabled = uiState !is LoginUiState.Loading,
                         onClick = onKakaoLoginClick
                     )
                 )
