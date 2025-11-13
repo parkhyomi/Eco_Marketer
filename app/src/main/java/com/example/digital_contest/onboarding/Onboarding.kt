@@ -34,9 +34,13 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Onboarding(
+    viewModel: OnboardingViewModel = viewModel(
+        factory = OnboardingViewModelFactory(LocalContext.current)
+    )
 ) {
     val pages = getOnboardingPages()
     val pagerState = rememberPagerState(pageCount = { pages.size })
+    val scope = rememberCoroutineScope()
 
     BoxWithConstraints(
         modifier = Modifier
@@ -73,7 +77,9 @@ fun Onboarding(
             if (pagerState.currentPage == pages.size - 1) {
                 Button(
                     onClick = {
-
+                        scope.launch {
+                            viewModel.saveCompleted()
+                        }
                     },
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
