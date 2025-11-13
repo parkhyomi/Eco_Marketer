@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <resources>
-    <style name="Theme.Digital_Contest" parent="android:Theme.Material.Light.NoActionBar"/>
+    <!-- 기본 테마 정의 -->
+    <style name="Theme.Digital_Contest" parent="Theme.Material3.Light.NoActionBar">
+        <item name="android:windowBackground">@color/white</item>
+    </style>
+
+    <!-- 스플래시 화면 테마 -->
     <style name="Theme.Digital_Contest.SplashScreen" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/white</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_icon_sized</item>
+        <item name="windowSplashScreenAnimatedIcon">@dimen/splashscreen_icon_size</item>
         <item name="windowSplashScreenAnimationDuration">2000</item>
         <item name="postSplashScreenTheme">@style/Theme.Digital_Contest</item>
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
     </style>
-    <style name="Theme.Digital_Contest.NoActionBar" parent="android:Theme.Material.Light.NoActionBar"/>
 </resources>
