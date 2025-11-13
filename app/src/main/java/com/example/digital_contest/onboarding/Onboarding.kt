@@ -34,6 +34,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Onboarding(
+    navController: NavController,
     viewModel: OnboardingViewModel = viewModel(
         factory = OnboardingViewModelFactory(LocalContext.current)
     )
@@ -79,6 +80,9 @@ fun Onboarding(
                     onClick = {
                         scope.launch {
                             viewModel.saveCompleted()
+                        }
+                        navController.navigate("login") {
+                            popUpTo("onboarding") { inclusive = true }
                         }
                     },
                     modifier = Modifier
