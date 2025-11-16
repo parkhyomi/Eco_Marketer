@@ -1,5 +1,12 @@
 package com.example.digital_contest.Write
 
+import android.graphics.ImageDecoder
+import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -22,7 +29,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import com.example.digital_contest.R
+import com.example.digital_contest.Write.util.ImageUtil
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -34,6 +45,71 @@ fun WriteView() {
     val selectedPlatform = remember { mutableStateOf("") }
     val selectedCategory = remember { mutableStateOf("") }
     val selectedConcept = remember { mutableStateOf("") }
+
+    val context = LocalContext.current
+    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
+    var showImageSourceSheet by remember { mutableStateOf(false) }
+
+    // Android 시스템 Photo Picker 사용 (Android 13+에서 시스템 UI 제공)
+    val imagePickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia()
+    ) { uri: Uri? ->
+        uri?.let {
+            try {
+                // URI를 Bitmap으로 변환 후 파일 저장
+                val bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    val source = ImageDecoder.createSource(context.contentResolver, it)
+                    ImageDecoder.decodeBitmap(source)
+                } else {
+                    @Suppress("DEPRECATION")
+                    MediaStore.Images.Media.getBitmap(context.contentResolver, it)
+                }
+                val file = ImageUtil.saveBitmapToFile(context, bitmap)
+                selectedImageUri = Uri.fromFile(file)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    // 권한 요청 Launcher
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        val allGranted = permissions.values.all { it }
+        if (allGranted) {
+            // 권한이 허용되면 이미지 소스 선택 BottomSheet 표시
+            showImageSourceSheet = true
+        }
+    }
+
+    // 카메라 Launcher
+    val cameraLauncher = ImageUtil.rememberCameraLauncher { bitmap ->
+        val file = ImageUtil.saveBitmapToFile(context, bitmap)
+        selectedImageUri = Uri.fromFile(file)
+    }
+
+    // 권한 체크 및 이미지 소스 선택 함수
+    val checkAndRequestPermissions: () -> Unit = {
+        if (ImageUtil.hasImagePermissions(context)) {
+            // 이미 권한이 있으면 바로 선택 BottomSheet 표시
+            showImageSourceSheet = true
+        } else {
+            // 권한 요청
+            val permissions = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+                arrayOf(
+                    android.Manifest.permission.CAMERA,
+                    android.Manifest.permission.READ_MEDIA_IMAGES
+                )
+            } else {
+                arrayOf(
+                    android.Manifest.permission.CAMERA,
+                    android.Manifest.permission.READ_EXTERNAL_STORAGE
+                )
+            }
+            permissionLauncher.launch(permissions)
+        }
+    }
 
     BoxWithConstraints(
         modifier = Modifier
@@ -63,12 +139,9 @@ fun WriteView() {
                     LabelText("사진 가져오기")
                     Spacer(modifier = Modifier.height(8.dp))
                     PhotoPickerBox(
-                        imageUri = null, // 실제 이미지 Uri State
-                        onClick = {
-                            // showImagePickerDialog.value = true
-                        }
+                        imageUri = selectedImageUri,
+                        onPickRequest = checkAndRequestPermissions  // 권한 체크 후 다이얼로그 표시
                     )
-
                 }
 
                 item {
@@ -195,6 +268,26 @@ fun WriteView() {
                 onItemClick = {
                     selectedConcept.value = it
                     showConceptSheet.value = false
+                }
+            )
+        }
+    }
+
+    // 이미지 소스 선택 BottomSheet (갤러리/카메라)
+    if (showImageSourceSheet) {
+        ModalBottomSheet(
+            onDismissRequest = { showImageSourceSheet = false },
+            containerColor = Color.White,
+            sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+        ) {
+            ImageSourceSheet(
+                onGalleryClick = {
+                    showImageSourceSheet = false
+                    imagePickerLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                },
+                onCameraClick = {
+                    showImageSourceSheet = false
+                    cameraLauncher.launch(null)
                 }
             )
         }
