@@ -1,4 +1,4 @@
-package com.example.digital_contest.Write
+package com.example.digital_contest.Write.Ui
 
 import android.net.Uri
 import androidx.compose.foundation.BorderStroke

@@ -1,4 +1,4 @@
-package com.example.digital_contest.Write
+package com.example.digital_contest.Write.Ui
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
