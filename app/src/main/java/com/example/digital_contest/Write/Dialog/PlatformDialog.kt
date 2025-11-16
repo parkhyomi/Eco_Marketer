@@ -1,4 +1,4 @@
-package com.example.digital_contest.Write.platform
+package com.example.digital_contest.Write.Dialog
 
 import android.app.Activity
 import android.util.Log

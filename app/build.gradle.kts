@@ -33,6 +33,20 @@ android {
         buildConfigField("String", "KAKAO_APP_KEY", "\"${localProperties["KAKAO_APP_KEY"]}\"")
         manifestPlaceholders["KAKAO_APP_KEY"] = "${localProperties["KAKAO_APP_KEY"]}"
 
+        buildConfigField("String", "JOONGNA", "\"${localProperties["JOONGNA"]}\"")
+        manifestPlaceholders["JOONGNA"]="${localProperties["JOONGNA"]}"
+        buildConfigField("String", "DAANGN", "\"${localProperties["DAANGN"]}\"")
+        manifestPlaceholders["DAANGN"]="${localProperties["DAANGN"]}"
+        buildConfigField("String", "BUNGANG", "\"${localProperties["BUNGANG"]}\"")
+        manifestPlaceholders["BUNGANG"]="${localProperties["BUNGANG"]}"
+
+        buildConfigField("String", "JOONGNA_SCHEME", "\"${localProperties["JOONGNA_SCHEME"]}\"")
+        manifestPlaceholders["JOONGNA_SCHEME"]="${localProperties["JOONGNA_SCHEME"]}"
+        buildConfigField("String", "DAANGN_SCHEME", "\"${localProperties["DAANGN_SCHEME"]}\"")
+        manifestPlaceholders["DAANGN_SCHEME"]="${localProperties["DAANGN_SCHEME"]}"
+        buildConfigField("String", "BUNGANG_SCHEME", "\"${localProperties["BUNGANG_SCHEME"]}\"")
+        manifestPlaceholders["BUNGANG_SCHEME"]="${localProperties["BUNGANG_SCHEME"]}"
+
         // 우리서버
         buildConfigField("String","BASE_URL","\"${localProperties["BASE_URL"]}\"")
 

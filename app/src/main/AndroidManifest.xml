@@ -57,19 +57,19 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <!-- 이 딥링크 URI를 사용하여 외부에서 앱으로 접근할 수 있도록 설정 -->
-                <data android:scheme="https" android:host="web.joongna.com"/>
-                <data android:scheme="https" android:host="www.daangn.com"/>
-                <data android:scheme="https" android:host="m.bunjang.co.kr"/>
+                <data android:scheme="https" android:host="${JOONGNA}" />
+                <data android:scheme="https" android:host="${DAANGN}" />
+                <data android:scheme="https" android:host="${BUNGANG}" />
             </intent-filter>
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="jnapps3"/>
-                <data android:scheme="karrot"/>
-                <data android:scheme="bunjang"/>
+
+                <data android:scheme="${JOONGNA_SCHEME}" />
+                <data android:scheme="${DAANGN_SCHEME}" />
+                <data android:scheme="${BUNGANG_SCHEME}" />
             </intent-filter>
         </activity>
 
