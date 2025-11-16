@@ -103,7 +103,7 @@ fun PhotoPickerBox(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    // SRP: 사진 선택 UI만 책임
+
     Box(
         modifier = modifier
             .border(1.dp, Color(217, 217, 217), RoundedCornerShape(6.dp))
