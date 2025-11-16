@@ -100,15 +100,17 @@ fun LabelText(
 @Composable
 fun PhotoPickerBox(
     imageUri: Uri?,
-    onClick: () -> Unit,
+    onPickRequest: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-
     Box(
         modifier = modifier
             .border(1.dp, Color(217, 217, 217), RoundedCornerShape(6.dp))
-            .size(64.dp) // 원하는 크기
-            .clickable { onClick() }
+            .size(64.dp)
+            .clip(RoundedCornerShape(6.dp))
+            .background(Color(0xFFF6F6F6))
+            .clickable { onPickRequest() },
+        contentAlignment = Alignment.Center
     ) {
         if (imageUri != null) {
             AsyncImage(
@@ -121,19 +123,20 @@ fun PhotoPickerBox(
             )
         } else {
             Column(
-                modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier.fillMaxSize()
             ) {
                 Image(
                     painter = painterResource(R.drawable.camera_icon),
-                    contentDescription = null,
+                    contentDescription = "사진 선택",
                     modifier = Modifier.size(24.dp)
                 )
             }
         }
     }
 }
+
 
 // 커스텀 텍스트 필드
 @Composable
@@ -317,6 +320,64 @@ fun ActionButtons(
                     color = Color.White
                 )
             }
+        }
+    }
+}
+
+// 이미지 소스 선택 BottomSheet (갤러리/카메라)
+@Composable
+fun ImageSourceSheet(
+    onGalleryClick: () -> Unit,
+    onCameraClick: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 16.dp, end = 16.dp, bottom = 32.dp, top = 16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        // 갤러리 버튼
+        Button(
+            onClick = onGalleryClick,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(48.dp)
+                .border(1.dp, Color(217, 217, 217), RoundedCornerShape(6.dp)),
+            colors = ButtonDefaults.buttonColors(containerColor = Color.White),
+            shape = RoundedCornerShape(6.dp)
+        ) {
+            Text(
+                text = "📷 갤러리에서 선택",
+                color = Color.Black,
+                style = TextStyle(
+                    fontFamily = pretendard,
+                    fontSize = 16.sp,
+                    lineHeight = 24.sp
+                )
+            )
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        // 카메라 버튼
+        Button(
+            onClick = onCameraClick,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(48.dp)
+                .border(1.dp, Color(217, 217, 217), RoundedCornerShape(6.dp)),
+            colors = ButtonDefaults.buttonColors(containerColor = Color.White),
+            shape = RoundedCornerShape(6.dp)
+        ) {
+            Text(
+                text = "📸 카메라로 촬영",
+                color = Color.Black,
+                style = TextStyle(
+                    fontFamily = pretendard,
+                    fontSize = 16.sp,
+                    lineHeight = 24.sp
+                )
+            )
         }
     }
 }
