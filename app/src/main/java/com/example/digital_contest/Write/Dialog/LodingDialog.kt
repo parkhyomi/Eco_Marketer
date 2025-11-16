@@ -1,4 +1,4 @@
-package com.example.digital_contest.Write
+package com.example.digital_contest.Write.Dialog
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -29,70 +29,130 @@ import com.example.digital_contest.R
 import com.example.digital_contest.ui.theme.Digital_ContestTheme
 
 @Composable
-fun LodingDialog(){
-
-    val fontBold = Font(R.font.pretendard_bold)
-    val fontMedium = Font(R.font.pretendard_medium)
-
-    Dialog(onDismissRequest ={}) {
-        Surface (
-            modifier = Modifier
-                .height(182.dp)
-                .width(312.dp),
-            shape = RoundedCornerShape(16.dp)){
-                Column(
-                    modifier = Modifier
-                        .padding(vertical = 24.dp)
-                        .fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Image(
-                        modifier = Modifier
-                            .fillMaxWidth(1f)
-                            .size(36.dp),
-                        painter = painterResource(R.drawable.dialog),
-                        contentDescription = null
-                    )
-                    Spacer(modifier = Modifier.padding(4.dp))
-
-                    Text(
-                        text = "AI가",
-                        fontFamily = FontFamily(fontBold),
-                        fontSize = 20.sp,
-                        lineHeight = 30.sp,
-                        color = Color.Black
-                    )
-
-                    Row() {
-                        Text(
-                            text = "게시글을 생성",
-                            fontFamily = FontFamily(fontBold),
-                            fontSize = 20.sp,
-                            lineHeight = 30.sp,
-                            color = Color(0xFF14AE5C),
-                        )
-                        Text(
-                            text = "하고 있어요!",
-                            fontFamily = FontFamily(fontBold),
-                            fontSize = 20.sp,
-                            lineHeight = 30.sp,
-                            color = Color.Black
-                        )
-                    }
-                    Spacer(modifier = Modifier.padding(4.dp))
-
-                    Text(
-                        text = "잠시만 기다려 주세요!",
-                        fontFamily = FontFamily(fontMedium),
-                        fontSize = 14.sp,
-                        lineHeight = 22.sp,
-                        color = Color.Black
-                    )
-                }
-            }
+fun LodingDialog() {
+    Dialog(onDismissRequest = {}) {
+        DialogSurface {
+            DialogContent()
         }
     }
+}
+
+@Composable
+private fun DialogSurface(content: @Composable () -> Unit) {
+    Surface(
+        modifier = Modifier
+            .height(182.dp)
+            .width(312.dp),
+        shape = RoundedCornerShape(16.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(vertical = 24.dp)
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            content()
+        }
+    }
+}
+
+/**
+ * 다이얼로그 내용
+ */
+@Composable
+private fun DialogContent() {
+    DialogIcon()
+    Spacer(modifier = Modifier.padding(4.dp))
+    DialogTitleSection()
+    Spacer(modifier = Modifier.padding(4.dp))
+    DialogMessage()
+}
+
+/**
+ * 다이얼로그 아이콘
+ */
+@Composable
+private fun DialogIcon() {
+    Image(
+        modifier = Modifier
+            .fillMaxWidth(1f)
+            .size(36.dp),
+        painter = painterResource(R.drawable.dialog),
+        contentDescription = null
+    )
+}
+
+/**
+ * 다이얼로그 제목 섹션
+ */
+@Composable
+private fun DialogTitleSection() {
+    val fontBold = Font(R.font.pretendard_bold)
+
+    Text(
+        text = "AI가",
+        fontFamily = FontFamily(fontBold),
+        fontSize = 20.sp,
+        lineHeight = 30.sp,
+        color = Color.Black
+    )
+
+    Row {
+        HighlightedText(
+            text = "게시글을 생성",
+            fontBold = fontBold
+        )
+        NormalText(
+            text = "하고 있어요!",
+            fontBold = fontBold
+        )
+    }
+}
+
+/**
+ * 강조 텍스트
+ */
+@Composable
+private fun HighlightedText(text: String, fontBold: Font) {
+    Text(
+        text = text,
+        fontFamily = FontFamily(fontBold),
+        fontSize = 20.sp,
+        lineHeight = 30.sp,
+        color = Color(0xFF14AE5C),
+    )
+}
+
+/**
+ * 일반 텍스트\
+ */
+@Composable
+private fun NormalText(text: String, fontBold: Font) {
+    Text(
+        text = text,
+        fontFamily = FontFamily(fontBold),
+        fontSize = 20.sp,
+        lineHeight = 30.sp,
+        color = Color.Black
+    )
+}
+
+/**
+ * 다이얼로그 메시지
+ */
+@Composable
+private fun DialogMessage() {
+    val fontMedium = Font(R.font.pretendard_medium)
+
+    Text(
+        text = "잠시만 기다려 주세요!",
+        fontFamily = FontFamily(fontMedium),
+        fontSize = 14.sp,
+        lineHeight = 22.sp,
+        color = Color.Black
+    )
+}
 
 @Preview
 @Composable

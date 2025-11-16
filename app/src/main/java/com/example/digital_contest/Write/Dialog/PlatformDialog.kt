@@ -1,13 +1,10 @@
-package com.example.digital_contest.Write
+package com.example.digital_contest.Write.platform
 
 import android.app.Activity
-import android.content.Intent
-import android.net.Uri
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -18,8 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,27 +32,38 @@ import androidx.navigation.NavController
 import com.example.digital_contest.R
 
 @Composable
-fun PlatformDialog(navController:NavController,dismiss:()->Unit) {
+fun PlatformDialog(
+    navController: NavController,
+    dismiss: () -> Unit
+) {
     val context = LocalContext.current
-
     val fontBold = Font(R.font.pretendard_bold)
 
-    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        // 딥링크에서 돌아왔을 때의 처리
-        if (result.resultCode == Activity.RESULT_OK) {
-            Log.d("PlatformDialog", "Returned from external app.")
-        } else {
-            Log.d("PlatformDialog", "Returned cancelled or with an error.")
+    // Activity Result Launcher 설정
+    val launcher = rememberLauncherForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        when (result.resultCode) {
+            Activity.RESULT_OK -> {
+                Log.d("PlatformDialog", "외부 앱에서 정상 복귀")
+            }
+            else -> {
+                Log.d("PlatformDialog", "외부 앱에서 취소 또는 에러로 복귀")
+            }
         }
         navController.navigate("main")
     }
+
+    val platformLauncher = AndroidPlatformLauncher(context, launcher)
+
     Dialog(onDismissRequest = dismiss) {
-        Surface (
+        Surface(
             modifier = Modifier
                 .height(290.dp)
                 .width(312.dp),
             color = Color.White,
-            shape = RoundedCornerShape(16.dp)) {
+            shape = RoundedCornerShape(16.dp)
+        ) {
             Column(
                 modifier = Modifier
                     .padding(vertical = 24.dp)
@@ -65,6 +71,7 @@ fun PlatformDialog(navController:NavController,dismiss:()->Unit) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
+                // 다이얼로그 아이콘
                 Image(
                     modifier = Modifier
                         .fillMaxWidth(1f)
@@ -72,8 +79,10 @@ fun PlatformDialog(navController:NavController,dismiss:()->Unit) {
                     painter = painterResource(R.drawable.dialog),
                     contentDescription = null
                 )
+
                 Spacer(modifier = Modifier.padding(4.dp))
 
+                // 제목
                 Text(
                     text = "어디에 글을 올려볼까요?",
                     fontFamily = FontFamily(fontBold),
@@ -84,120 +93,15 @@ fun PlatformDialog(navController:NavController,dismiss:()->Unit) {
 
                 Spacer(modifier = Modifier.padding(4.dp))
 
-                Button(
-                    onClick = {
-                        val app = "jnapps3://?applink=main"
-                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(app))
-                        if (intent.resolveActivity(context.packageManager) != null) {
-                            // context.startActivity(intent)
-                            // navController.navigate("main")
-                            launcher.launch(intent)
-                        } else {
-                            // 앱이 설치되지 않은 경우 당근마켓 웹페이지로 이동
-                            val url = "https://web.joongna.com"
-                            val webIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                            //context.startActivity(webIntent)
-                            // navController.navigate("main")
-                            launcher.launch(webIntent)
+                PlatformConfig.getAllPlatforms().forEach { platform ->
+                    PlatformButton(
+                        platform = platform,
+                        onClick = {
+                            platformLauncher.launch(platform)
+                            dismiss()
                         }
-                        dismiss()
-                        //navController.navigate("main")
-                    },
-                    colors = ButtonDefaults.buttonColors(Color.White),
-                    modifier = Modifier
-                        .border(
-                            1.dp,
-                            color = Color(0xFFD9D9D9),
-                            shape = RoundedCornerShape(6.dp)
-                        )
-                        .size(280.dp, 48.dp),
-                ) {
-                    Text(
-                        text = "중고나라 글쓰러가기",
-                        fontFamily = FontFamily(fontBold),
-                        fontSize = 20.sp,
-                        lineHeight = 30.sp,
-                        color = Color(0xFF14AE5C),
                     )
-                }
-
-                Spacer(modifier = Modifier.padding(4.dp))
-
-                Button(
-                    onClick = {
-                        val app = "karrot://"
-                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(app))
-                        if (intent.resolveActivity(context.packageManager) != null) {
-                            // context.startActivity(intent)
-                            // navController.navigate("main")
-                            launcher.launch(intent)
-                        } else {
-                            // 앱이 설치되지 않은 경우 당근마켓 웹페이지로 이동
-                            val url = "https://www.daangn.com/"
-                            val webIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                            //context.startActivity(webIntent)
-                            // navController.navigate("main")
-                            launcher.launch(webIntent)
-                    }
-                        dismiss()
-                        //navController.navigate("main")
-                    },
-                    colors = ButtonDefaults.buttonColors(Color.White),
-                    modifier = Modifier
-                        .border(
-                            1.dp,
-                            color = Color(0xFFD9D9D9),
-                            shape = RoundedCornerShape(6.dp)
-                        )
-                        .size(280.dp, 48.dp)
-                ) {
-                    Text(
-                        text = "당근 글쓰러가기",
-                        fontFamily = FontFamily(fontBold),
-                        fontSize = 20.sp,
-                        lineHeight = 30.sp,
-                        color = Color(0xFFFF8329),
-                    )
-                }
-                Spacer(modifier = Modifier.padding(4.dp))
-
-                Button(
-                    onClick = {
-                        val app = "bunjang:/"
-                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(app))
-
-                        if (intent.resolveActivity(context.packageManager) != null) {
-                            // context.startActivity(intent)
-                            //  navController.navigate("main")
-                            launcher.launch(intent)
-                        } else {
-                            // 앱이 설치되지 않은 경우 웹페이지로 이동
-                            val url = "https://m.bunjang.co.kr"
-                            val webIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                            //context.startActivity(webIntent)
-                            // navController.navigate("main")
-                            launcher.launch(webIntent)
-                        }
-                        dismiss()
-                        // navController.navigate("main")
-                    },
-                    colors = ButtonDefaults.buttonColors(Color.White),
-                    modifier = Modifier
-                        .border(
-                            1.dp,
-                            color = Color(0xFFD9D9D9),
-                            shape = RoundedCornerShape(6.dp)
-                        )
-                        .size(280.dp, 48.dp)
-
-                ) {
-                    Text(
-                        text = "번개장터 글쓰러가기",
-                        fontFamily = FontFamily(fontBold),
-                        fontSize = 20.sp,
-                        lineHeight = 30.sp,
-                        color = Color(0xFFFF0000),
-                    )
+                    Spacer(modifier = Modifier.padding(4.dp))
                 }
             }
         }
