@@ -1,198 +1,134 @@
-//package com.example.digital_contest.Viewmodel
-//
-//import android.content.Context
-//import android.util.Log
-//import androidx.compose.ui.util.fastForEachIndexed
-//import androidx.lifecycle.ViewModel
-//import androidx.lifecycle.ViewModelProvider
-//import androidx.lifecycle.viewModelScope
-//import com.example.digital_contest.API.Manager.MyPageManager
-//import com.example.digital_contest.API.Mypage.MyPageProduct
-//import com.example.digital_contest.API.Mypage.ProductStatus
-//import kotlinx.coroutines.delay
-//import kotlinx.coroutines.flow.MutableStateFlow
-//import kotlinx.coroutines.flow.StateFlow
-//import kotlinx.coroutines.flow.update
-//import kotlinx.coroutines.launch
-//
-//class MyPageViewModel(private val context: Context): ViewModel() {
-//    //판매중.판매완료.판매실패 받아오는 부분.
-//    private val myPageManager = MyPageManager(context)
-//
-//    private val _onSaleProducts = MutableStateFlow<List<Map<String, Any>>>(emptyList())
-//    val onSaleProducts: StateFlow<List<Map<String, Any>>> = _onSaleProducts  //판매중 저장
-//
-//    private val _completedProducts = MutableStateFlow<List<Map<String, Any>>>(emptyList())
-//    val completedProducts: StateFlow<List<Map<String, Any>>> = _completedProducts  //판매완료
-//
-//    private val _failedProducts = MutableStateFlow<List<Map<String, Any>>>(emptyList())
-//    val failedProducts: StateFlow<List<Map<String, Any>>> = _failedProducts  //판매실패.
-//
-//    private val _onSaleproductCount = MutableStateFlow(0)
-//    val onSaleproductCount: StateFlow<Int> = _onSaleproductCount  //이부분들은 이제 갯수를 가지는 부분.
-//
-//    private val _completedproductCount = MutableStateFlow(0)
-//    val completedproductCount: StateFlow<Int> = _completedproductCount
-//
-//    private val _failedproductCount = MutableStateFlow(0)
-//    val failedproductCount: StateFlow<Int> = _failedproductCount
-//
-//
-//    fun loadAllProducts() {  //
-//
-//        Log.d("MyPageViewModel", "Loading all products...")
-//        viewModelScope.launch {
-//            val states = listOf(null, true, false)
-//            states.fastForEachIndexed { index, state ->
-//                try {
-//                    MyPageProduct(context, state)
-//                    delay(300) // API 호출 및 데이터 저장을 위한 대기 시간
-//                    val products = myPageManager.getProductData(state)
-//                    when (index) {
-//                        0 -> {
-//                            _onSaleProducts.value = products
-//                            _onSaleproductCount.value = products.size
-//                            Log.d("판매중", "${_onSaleProducts.value}")
-//                        }
-//
-//                        1 -> {
-//                            _completedProducts.value = products
-//                            _completedproductCount.value = products.size
-//                            Log.d("판매완료", "${_completedProducts.value}")
-//                        }
-//
-//                        2 -> {
-//                            _failedProducts.value = products
-//                            _failedproductCount.value = products.size
-//                            Log.d("판매실패", "${_failedProducts.value}")
-//                        }
-//                    }
-//                } catch (e: Exception) {
-//                    Log.e("ViewModel", "Error loading products for state: $state", e)
-//                }
-//
-//            }
-//
-//        }
-//    }
-//
-//
-//    fun loadOnSaleProducts() {
-//        Log.d("MyPageViewModel", "Loading onSale products...")
-//        viewModelScope.launch {
-//            try {
-//                MyPageProduct(context, null)  // null은 onSale 상태를 나타냅니다
-//                delay(100) // API 호출 및 데이터 저장을 위한 대기 시간
-//                val products = myPageManager.getProductData(null)
-//                _onSaleProducts.value = products
-//                _onSaleproductCount.value = products.size
-//                Log.d("판매중", "${_onSaleProducts.value}")
-//            } catch (e: Exception) {
-//                Log.e("ViewModel", "Error loading onSale products", e)
-//            }
-//        }
-//    }
-//
-//    fun updateProductStatus(productId: Int, newStatus: Boolean) {
-//        viewModelScope.launch {
-//            ProductStatus(context, productId, newStatus)
-//            updateLocalProduct(productId, newStatus)
-//            if(newStatus==true){
-//                sortCompletedProductsByIdAscending()
-//            }else if(newStatus==false){
-//                sortFailedProductsByIdAscending()
-//            }
-//        }
-//    }
-//
-//    fun updateLocalProduct(productId: Int, newStatus: Boolean) {
-//        val updateList = { list: List<Map<String, Any>> ->
-//            list.map { product ->
-//                if (product["productId"] as Int == productId) {
-//                    product + ("status" to newStatus)
-//                } else {
-//                    product
-//                }
-//            }
-//        }
-//
-//        _onSaleProducts.update { updateList(it) }
-//        _completedProducts.update { updateList(it) }
-//        _failedProducts.update { updateList(it) }
-//        when (newStatus) {
-//            true -> {
-//                _completedProducts.update {
-//                    it + (_onSaleProducts.value.find { it["productId"] as Int == productId }
-//                        ?: emptyMap())
-//                }
-//                _onSaleProducts.update { it.filter { it["productId"] as Int != productId } }
-//                _failedProducts.update { it.filter { it["productId"] as Int != productId } }
-//            }
-//
-//            false -> {
-//                _failedProducts.update {
-//                    it + (_onSaleProducts.value.find { it["productId"] as Int == productId }
-//                        ?: emptyMap())
-//                }
-//                _onSaleProducts.update { it.filter { it["productId"] as Int != productId } }
-//                _completedProducts.update { it.filter { it["productId"] as Int != productId } }
-//            }
-//        }
-//
-//        // 카운트 업데이트
-//        updateProductCounts()
-//    }
-//
-//    private fun updateProductCounts() {
-//        _onSaleproductCount.value = _onSaleProducts.value.size
-//        _completedproductCount.value = _completedProducts.value.size
-//        _failedproductCount.value = _failedProducts.value.size
-//    }
-//
-//    fun sortProductsByIdAscending(){
-//        sortOnSaleProductsByIdAscending()
-//        sortCompletedProductsByIdAscending()
-//        sortFailedProductsByIdAscending()
-//    }
-//
-//    fun sortOnSaleProductsByIdAscending() {
-//        viewModelScope.launch {
-//            val sortedProducts = _onSaleProducts.value.sortedBy { it["productId"] as Int }
-//            _onSaleProducts.value = sortedProducts
-//            Log.d("판매중정렬확인","${_onSaleProducts.value}")
-//        }
-//    }
-//
-//   fun sortCompletedProductsByIdAscending() {
-//        viewModelScope.launch {
-//            val sortedProducts = _completedProducts.value.sortedBy { it["productId"] as Int }
-//            _completedProducts.value = sortedProducts
-//            Log.d("판매완료정렬확인","${_completedProducts.value }")
-//        }
-//    }
-//
-//   fun sortFailedProductsByIdAscending() {
-//        viewModelScope.launch {
-//            val sortedProducts = _failedProducts.value.sortedBy { it["productId"] as Int }
-//            _failedProducts.value = sortedProducts
-//            Log.d("판매실패정렬확인","${_failedProducts.value}")
-//        }
-//   }
-//    fun loadAndSortAllProducts() {
-//        viewModelScope.launch {
-//            loadAllProducts()
-//            delay(1600) // 데이터 로딩을 위한 대기 시간
-//            sortProductsByIdAscending()
-//        }
-//    }
-//}
-//
-//class MyPageViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
-//    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-//        if (modelClass.isAssignableFrom(MyPageViewModel::class.java)) {
-//            @Suppress("UNCHECKED_CAST")
-//            return MyPageViewModel(context) as T
-//        }
-//        throw IllegalArgumentException("Unknown ViewModel class")
-//    }
-//}
+package com.example.digital_contest.Mypage
+
+import android.content.Context
+import android.util.Log
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import com.example.digital_contest.Login.AuthDataStore
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+
+class MyPageViewModel(
+    private val repository: MyPageRepository
+) : ViewModel() {
+
+    private val _onSaleProducts = MutableStateFlow<List<ProductData>>(emptyList())
+    val onSaleProducts: StateFlow<List<ProductData>> = _onSaleProducts.asStateFlow()
+
+    private val _completedProducts = MutableStateFlow<List<ProductData>>(emptyList())
+    val completedProducts: StateFlow<List<ProductData>> = _completedProducts.asStateFlow()
+
+    private val _failedProducts = MutableStateFlow<List<ProductData>>(emptyList())
+    val failedProducts: StateFlow<List<ProductData>> = _failedProducts.asStateFlow()
+
+    private val _userNickname = MutableStateFlow("")
+    val userNickname: StateFlow<String> = _userNickname.asStateFlow()
+
+    /**
+     * 모든 상품 로드 (판매중, 판매완료, 판매실패)
+     */
+    fun loadAllProducts() {
+        viewModelScope.launch {
+            try {
+                Log.d("MyPageViewModel", "Loading all products...")
+                loadProductsByStatus(ProductStatus.ON_SALE)
+                loadProductsByStatus(ProductStatus.COMPLETED)
+                loadProductsByStatus(ProductStatus.FAILED)
+            } catch (e: Exception) {
+                Log.e("MyPageViewModel", "Error loading all products", e)
+            }
+        }
+    }
+
+    /**
+     * 상태별 상품 로드
+     */
+    private suspend fun loadProductsByStatus(status: ProductStatus) {
+        try {
+            val products = repository.getProductsByStatus(status)
+            updateProductsState(status, products)
+            Log.d("MyPageViewModel", "Loaded ${products.size} products for status: $status")
+        } catch (e: Exception) {
+            Log.e("MyPageViewModel", "Error loading products for status: $status", e)
+        }
+    }
+
+    /**
+     * 상품 상태 업데이트
+     */
+    private fun updateProductsState(status: ProductStatus, products: List<ProductData>) {
+        when (status) {
+            ProductStatus.ON_SALE -> {
+                _onSaleProducts.value = products.sortedBy { it.productId }
+            }
+            ProductStatus.COMPLETED -> {
+                _completedProducts.value = products.sortedBy { it.productId }
+            }
+            ProductStatus.FAILED -> {
+                _failedProducts.value = products.sortedBy { it.productId }
+            }
+        }
+    }
+
+    /**
+     * 상품 상태 변경 (판매완료/판매실패)
+     */
+    fun updateProductStatus(productId: Int, isCompleted: Boolean) {
+        viewModelScope.launch {
+            try {
+                repository.updateProductStatus(productId, isCompleted)
+                moveProductToNewStatus(productId, isCompleted)
+                Log.d("MyPageViewModel", "Product $productId status updated to ${if (isCompleted) "completed" else "failed"}")
+            } catch (e: Exception) {
+                Log.e("MyPageViewModel", "Error updating product status", e)
+            }
+        }
+    }
+
+    /**
+     * 로컬 상태에서 상품 이동
+     */
+    private fun moveProductToNewStatus(productId: Int, isCompleted: Boolean) {
+        val product = _onSaleProducts.value.find { it.productId == productId } ?: return
+
+        _onSaleProducts.value = _onSaleProducts.value.filter { it.productId != productId }
+        if (isCompleted) {
+            _completedProducts.value = (_completedProducts.value + product).sortedBy { it.productId }
+        } else {
+            _failedProducts.value = (_failedProducts.value + product).sortedBy { it.productId }
+        }
+    }
+
+    /**
+     * 사용자 닉네임 로드
+     */
+    fun loadUserNickname() {
+        viewModelScope.launch {
+            try {
+                val nickname = repository.getUserNickname()
+                _userNickname.value = nickname
+                Log.d("MyPageViewModel", "Loaded nickname: $nickname")
+            } catch (e: Exception) {
+                _userNickname.value = "사용자"
+                Log.e("MyPageViewModel", "Error loading nickname", e)
+            }
+        }
+    }
+}
+
+class MyPageViewModelFactory(
+    private val context: Context,
+    private val authDataStore: AuthDataStore
+) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(MyPageViewModel::class.java)) {
+            val repository = MyPageRepositoryImpl(context, authDataStore)
+            @Suppress("UNCHECKED_CAST")
+            return MyPageViewModel(repository) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
+}
