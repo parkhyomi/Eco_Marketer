@@ -8,12 +8,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 
-
 @Composable
-fun MainView() {
-    val navController = rememberNavController()
+fun MainView(navController: NavHostController) {
 
     BoxWithConstraints(
         modifier = Modifier
@@ -43,7 +42,7 @@ fun MainView() {
                 myLevel = 1,
                 maxHeight = maxHeight,
                 onWriteClick = {
-                    // TODO: 글 작성 페이지 이동
+                    navController.navigate("write"){popUpTo("main"){inclusive = true} }
                 }
             )
         }
@@ -58,5 +57,5 @@ fun MainView() {
 @Preview(showBackground = true)
 @Composable
 fun PreviewMainView() {
-    MainView()
+    MainView(navController = rememberNavController())
 }

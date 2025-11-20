@@ -222,7 +222,7 @@ fun BottomNavigationBar(
                 title = "메인",
                 navBarHeight = navBarHeight,
                 isSelected = currentRoute == "main",
-                onClick = { /* TODO: 메인으로 이동 */ }
+                onClick = { navController.navigate("main"){popUpTo("main"){inclusive = true} }}
             )
             NavigationItem(
                 iconRes = R.drawable.state_symbol,
@@ -243,7 +243,12 @@ fun BottomNavigationBar(
                 title = "마이페이지",
                 navBarHeight = navBarHeight,
                 isSelected = currentRoute == "mypage",
-                onClick = { /* TODO: 마이페이지로 이동 */ }
+                onClick = {
+                    navController.navigate("mypage") {
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                }
             )
         }
     }

@@ -10,6 +10,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.digital_contest.Login.LoginView
+import com.example.digital_contest.Main.MainView
+import com.example.digital_contest.Mypage.MyPageScreen
+import com.example.digital_contest.Write.WriteView
 import com.example.digital_contest.onboarding.Onboarding
 
 @Composable
@@ -26,7 +29,9 @@ fun AppNavigation() {
 
     NavigationGraph(
         navController = navController,
-        startDestination = startDestination
+        startDestination =
+            "main"
+//            startDestination
     )
 }
 
@@ -51,9 +56,17 @@ fun NavigationGraph(
 
         // 메인 화면
         composable("main") {
-            MainView(
-//                navController = navController
-            )
+            MainView(navController = navController)
+        }
+
+        // 글쓰기 화면
+        composable("write") {
+            WriteView()
+        }
+
+        // 마이페이지
+        composable("mypage") {
+             MyPageScreen(navController = navController)
         }
     }
 }
