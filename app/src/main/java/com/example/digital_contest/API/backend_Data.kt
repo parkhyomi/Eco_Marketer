@@ -33,29 +33,6 @@ import kotlinx.serialization.Serializable
 //    val myLevel:Int
 //)
 //
-//// 유저 이름 조회
-//data class UserName(
-//    val data: usernickname
-//)
-//// 유저 이름 조회 데이터
-//data class usernickname(
-//    val nickname: String
-//)
-//data class ProductData(
-//    val data:List<Product>
-//)
-//
-//@Serializable
-//data class Product(
-//    val productId:Int,
-//    val product:String,
-//    val productCategory:String,
-//    val imageUrl:String,
-//    val createdAt:String,
-//    val company:List<String>,
-//    val price:Int
-//)
-//
 //
 //data class WritepostcreateData(
 //    val data:Writepost

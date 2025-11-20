@@ -53,7 +53,3 @@
 //    @Header("Authorization") accessToken: String
 //): Call<colorDataResponse>
 //
-//@GET("/api/user/nickname")
-//fun username(
-//    @Header("Authorization")accessToken : String
-//): Call<UserName>
