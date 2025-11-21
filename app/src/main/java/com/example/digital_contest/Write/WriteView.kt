@@ -4,6 +4,7 @@ import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -22,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.text.input.KeyboardType
@@ -29,10 +31,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.digital_contest.R
+import com.example.digital_contest.Write.Dialog.LodingDialog
+import com.example.digital_contest.Write.Dialog.PlatformDialog
 import com.example.digital_contest.Write.Ui.ActionButtons
 import com.example.digital_contest.Write.Ui.CategorySheet
 import com.example.digital_contest.Write.Ui.CustomTextField
@@ -49,18 +58,60 @@ import com.example.digital_contest.Write.util.copyToClipboard
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WriteView() {
-    //임의 처리
+fun WriteView(navController: NavHostController) {
+    val context = LocalContext.current
+    val viewModel: WriteViewModel = viewModel(factory = WriteViewModelFactory(context))
+
+    // ViewModel의 상태 구독
+    val writeUiState by viewModel.writeUiState.collectAsState()
+    val productPlusState by viewModel.productPlusState.collectAsState()
+    val title by viewModel.title.collectAsState()
+    val price by viewModel.price.collectAsState()
+    val selectedPlatform by viewModel.selectedPlatform.collectAsState()
+    val selectedCategory by viewModel.selectedCategory.collectAsState()
+    val selectedConcept by viewModel.selectedConcept.collectAsState()
+    val generatedText by viewModel.generatedText.collectAsState()
+
     val showPlatformSheet = remember { mutableStateOf(false) }
     val showCategorySheet = remember { mutableStateOf(false) }
     val showConceptSheet = remember { mutableStateOf(false) }
-    val selectedPlatform = remember { mutableStateOf("") }
-    val selectedCategory = remember { mutableStateOf("") }
-    val selectedConcept = remember { mutableStateOf("") }
 
-    val context = LocalContext.current
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
     var showImageSourceSheet by remember { mutableStateOf(false) }
+    var showPlatformDialog by remember { mutableStateOf(false) }
+
+    // UI 상태 처리
+    LaunchedEffect(writeUiState) {
+        when (val state = writeUiState) {
+            is WriteUiState.Error -> {
+                Toast.makeText(context, state.message, Toast.LENGTH_SHORT).show()
+                viewModel.resetState()
+            }
+
+            is WriteUiState.Success -> {
+                // 성공 처리는 자동으로 UI에 반영됨
+            }
+
+            else -> {}
+        }
+    }
+
+    LaunchedEffect(productPlusState) {
+        when (val state = productPlusState) {
+            is ProductPlusState.Success -> {
+                Toast.makeText(context, "게시글이 성공적으로 등록되었습니다", Toast.LENGTH_SHORT).show()
+                viewModel.resetState()
+                showPlatformDialog = false
+            }
+
+            is ProductPlusState.Error -> {
+                Toast.makeText(context, state.message, Toast.LENGTH_SHORT).show()
+                viewModel.resetState()
+            }
+
+            else -> {}
+        }
+    }
 
     // Android 시스템 Photo Picker 사용 (Android 13+에서 시스템 UI 제공)
     val imagePickerLauncher = rememberLauncherForActivityResult(
@@ -77,7 +128,9 @@ fun WriteView() {
                     MediaStore.Images.Media.getBitmap(context.contentResolver, it)
                 }
                 val file = ImageUtil.saveBitmapToFile(context, bitmap)
-                selectedImageUri = Uri.fromFile(file)
+                val fileUri = Uri.fromFile(file)
+                selectedImageUri = fileUri
+                viewModel.updateImageUri(fileUri)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -98,7 +151,9 @@ fun WriteView() {
     // 카메라 Launcher
     val cameraLauncher = ImageUtil.rememberCameraLauncher { bitmap ->
         val file = ImageUtil.saveBitmapToFile(context, bitmap)
-        selectedImageUri = Uri.fromFile(file)
+        val fileUri = Uri.fromFile(file)
+        selectedImageUri = fileUri
+        viewModel.updateImageUri(fileUri)
     }
 
     // 권한 체크 및 이미지 소스 선택 함수
@@ -108,7 +163,7 @@ fun WriteView() {
             showImageSourceSheet = true
         } else {
             // 권한 요청
-            val permissions = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            val permissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 arrayOf(
                     android.Manifest.permission.CAMERA,
                     android.Manifest.permission.READ_MEDIA_IMAGES
@@ -126,9 +181,9 @@ fun WriteView() {
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
+            .systemBarsPadding()
             .background(Color.White)
     ) {
-        val maxWidth = maxWidth
         val maxHeight = maxHeight
 
         Column(
@@ -138,7 +193,7 @@ fun WriteView() {
             TopBar(
                 title = "게시글 생성하기",
                 onNavClick = {
-                    // navHostController.navigate("main") {popUpTo("write") {inclusive = true}}
+                    navController.navigate("main") { popUpTo("write") { inclusive = true } }
                 }
             )
 
@@ -161,8 +216,8 @@ fun WriteView() {
                     LabelText("제목")
                     Spacer(modifier = Modifier.height(8.dp))
                     CustomTextField(
-                        value = "",                // title state
-                        onValueChange = { /* title change */ },
+                        value = title,
+                        onValueChange = { viewModel.updateTitle(it) },
                         placeholder = "제목",
                     )
                 }
@@ -172,8 +227,8 @@ fun WriteView() {
                     LabelText("가격")
                     Spacer(modifier = Modifier.height(8.dp))
                     CustomTextField(
-                        value = "",                // price state
-                        onValueChange = { /* price change */ },
+                        value = price,
+                        onValueChange = { viewModel.updatePrice(it) },
                         placeholder = "가격",
                         keyboardType = KeyboardType.Number,
                     )
@@ -183,7 +238,7 @@ fun WriteView() {
                     Spacer(modifier = Modifier.height(16.dp))
                     SelectBox(
                         label = "플랫폼 선택",
-                        value = selectedPlatform.value,
+                        value = selectedPlatform,
                         placeholder = "플랫폼을 선택해주세요",
                         onClick = { showPlatformSheet.value = true },
                         iconRes = R.drawable.chevron_down_1
@@ -194,7 +249,7 @@ fun WriteView() {
                     Spacer(modifier = Modifier.height(16.dp))
                     SelectBox(
                         label = "카테고리",
-                        value = selectedCategory.value,
+                        value = selectedCategory,
                         placeholder = "카테고리를 선택해주세요",
                         onClick = { showCategorySheet.value = true },
                         iconRes = R.drawable.chevron_down_1
@@ -205,7 +260,7 @@ fun WriteView() {
                     Spacer(modifier = Modifier.height(16.dp))
                     SelectBox(
                         label = "판매 컨셉",
-                        value = selectedConcept.value,
+                        value = selectedConcept,
                         placeholder = "판매 컨셉을 선택해주세요",
                         onClick = { showConceptSheet.value = true },
                         iconRes = R.drawable.chevron_down_1
@@ -213,25 +268,29 @@ fun WriteView() {
                 }
                 // 생성된 글
                 item {
-                    // 통신 중 로딩중일 때 -> 다이어로그
-                    // 통신 완료 -> 생성된 글 보여주기
                     Spacer(modifier = Modifier.height(16.dp))
-                    GeneratedTextBox(
-                        text = "생성된 글입니다", // 실제 generatedText state
-                        onCopyClick = { }
-                    )
+                    if (generatedText.isNotEmpty()) {
+                        GeneratedTextBox(
+                            text = generatedText,
+                            onCopyClick = {
+                                copyToClipboard(context, generatedText)
+                                Toast.makeText(context, "클립보드에 복사되었습니다", Toast.LENGTH_SHORT).show()
+                            }
+                        )
+                    }
                     Spacer(modifier = Modifier.height(16.dp))
                 }
 
                 // 버튼
                 item {
-                    // 생성 전/후 상태에 따라 버튼 변경
-                    // API 연결 후 inGenerated 판별
                     ActionButtons(
-                        isGenerated = false, // 실제 state
-                        onGenerateClick = { /* 생성하기 */ },
-                        onRegenerateClick = { /* 다시 생성하기 */ },
-                        onGoWriteClick = { /* 글쓰러 가기 */ }
+                        isGenerated = generatedText.isNotEmpty(),
+                        onGenerateClick = { viewModel.uploadProduct() },
+                        onRegenerateClick = { viewModel.uploadProduct() },
+                        onGoWriteClick = {
+                            showPlatformDialog = true
+                            viewModel.productPlus()
+                        }
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                 }
@@ -248,7 +307,7 @@ fun WriteView() {
         ) {
             PlatformSheet(
                 onItemClick = {
-                    selectedPlatform.value = it
+                    viewModel.updatePlatform(it)
                     showPlatformSheet.value = false
                 }
             )
@@ -263,7 +322,7 @@ fun WriteView() {
         ) {
             CategorySheet(
                 onItemClick = {
-                    selectedCategory.value = it
+                    viewModel.updateCategory(it)
                     showCategorySheet.value = false
                 }
             )
@@ -278,7 +337,7 @@ fun WriteView() {
         ) {
             SaleConceptSheet(
                 onItemClick = {
-                    selectedConcept.value = it
+                    viewModel.updateConcept(it)
                     showConceptSheet.value = false
                 }
             )
@@ -304,10 +363,23 @@ fun WriteView() {
             )
         }
     }
+
+    // 로딩 다이얼로그
+    if (writeUiState is WriteUiState.Loading) {
+        LodingDialog()
+    }
+    // 플랫폼 선택 다이얼로그
+    if (showPlatformDialog) {
+        PlatformDialog(
+            dismiss = { showPlatformDialog = false },
+            navController = navController
+        )
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun WriteViewPreview() {
-    WriteView()
+    val navController = rememberNavController()
+    WriteView(navController)
 }

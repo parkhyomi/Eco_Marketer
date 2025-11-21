@@ -32,16 +32,7 @@ import kotlinx.serialization.Serializable
 //    val myLevelExperience: Int,
 //    val myLevel:Int
 //)
-//
-//
-//data class WritepostcreateData(
-//    val data:Writepost
-//)
-//
-//data class Writepost(
-//    val introduceText: String,
-//    val price:Int
-//)
+
 //
 //data class CategoryStatisResponse(
 //    val data: List<CategoryData>

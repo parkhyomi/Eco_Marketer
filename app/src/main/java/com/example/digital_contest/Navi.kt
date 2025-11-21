@@ -61,7 +61,7 @@ fun NavigationGraph(
 
         // 글쓰기 화면
         composable("write") {
-            WriteView()
+            WriteView(navController= navController)
         }
 
         // 마이페이지

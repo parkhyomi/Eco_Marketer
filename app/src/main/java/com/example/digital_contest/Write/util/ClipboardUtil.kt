@@ -6,14 +6,7 @@ import android.content.Context
 import android.widget.Toast
 
 /**
- * 클립보드 유틸리티
- * Single Responsibility Principle - 각 함수가 하나의 책임만 가짐
- */
-
-/**
- * 클립보드에 텍스트 복사 (메인 함수)
- * @param context Android Context
- * @param text 복사할 텍스트
+ * 클립보드에 텍스트 복사
  */
 fun copyToClipboard(context: Context, text: String) {
     val clipboardManager = getClipboardManager(context)

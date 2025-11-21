@@ -56,5 +56,12 @@ class TokenManager(context: Context) {
         val refreshToken = authDataStore.refreshToken.first()
         return !accessToken.isNullOrEmpty() && !refreshToken.isNullOrEmpty()
     }
+
+    /**
+     * Access Token 가져오기
+     */
+    suspend fun getAccessToken(): String? {
+        return authDataStore.accessToken.first()
+    }
 }
 
