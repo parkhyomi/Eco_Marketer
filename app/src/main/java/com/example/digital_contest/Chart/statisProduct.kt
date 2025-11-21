@@ -1,164 +1,123 @@
-package com.example.digital_contest.Chart//package com.example.digital_contest.API.Static
-//
-//import android.content.Context
-//import android.util.Log
-//import com.example.digital_contest.API.Data.StatisDataStore
-//import com.example.digital_contest.API.Manager.TokenManager
-//import com.example.digital_contest.API.RetrofitHelper
-//import com.example.digital_contest.API.WriteService
-//import kotlinx.coroutines.Dispatchers
-//import kotlinx.coroutines.flow.first
-//import kotlinx.coroutines.withContext
-//
-//
-//suspend fun callPlatformStatis(context: Context, kind: String) {
-//    val retrofit = RetrofitHelper.getRetrofitInstance(WriteService::class.java)
-//    val service = retrofit.create(StaticService::class.java)
-//    val tokenManager = TokenManager(context)
-//    val accessToken = tokenManager.getAccessToken() ?: return
-//
-//    val statisDataStore = StatisDataStore(context)
-//
-//    try {
-//        val response = withContext(Dispatchers.IO) {
-//            service.platformStatis(accessToken, kind).execute()
-//        }
-//        if (response.isSuccessful) {
-//            Log.d("API_RESPONSE", "저장된 데이터: ${response.body()}")
-//            val data = response.body()?.data
-//            if (data != null) {
-//                Log.d("API_RESPONSE", "저장된 데이터: $data")
-//                when (kind) {
-//                    "platform-whole" -> statisDataStore.saveTotalData(data)
-//                    "platform-mine" -> statisDataStore.saveMyData(data)
-//                }
-//                val products = when (kind) {
-//                    "platform-whole" -> statisDataStore.totalData.first()
-//                    "platform-mine" -> statisDataStore.myData.first()
-//                    else -> emptyList()
-//                }
-//                Log.d("저장된내용", "저장된 데이터: $products")
-//            } else {
-//                Log.e("에러", "데이터 없음")
-//            }
-//        } else {
-//            Log.e("API_ERROR", "Error: ${response.code()}")
-//        }
-//    } catch (e: Exception) {
-//        Log.e("API_ERROR", "Error: ${e.message}")
-//    }
-//}
-//
-//suspend fun callCategoryStatis(context: Context, kind: String) {
-//    val retrofit = RetrofitHelper.getRetrofitInstance(WriteService::class.java)
-//    val service = retrofit.create(StaticService::class.java)
-//    val tokenManager = TokenManager(context)
-//    val accessToken = tokenManager.getAccessToken() ?: return
-//
-//    val statisDataStore = StatisDataStore(context)
-//
-//    try {
-//        val response = withContext(Dispatchers.IO) {
-//            service.categoryStatis(accessToken, kind).execute()
-//        }
-//        if (response.isSuccessful) {
-//            Log.d("API_RESPONSE", "저장된 데이터: ${response.body()}")
-//            val data = response.body()?.data
-//            if (data != null) {
-//                Log.d("API_RESPONSE", "저장된 데이터: $data")
-//                when (kind) {
-//                    "category-whole" -> statisDataStore.savecategoryData(data)
-//                    "category-mine" -> statisDataStore.saveMycategoryData(data)
-//                }
-//                val products = when (kind) {
-//                    "category-whole" -> statisDataStore.totalCategoryData.first()
-//                    "category-mine" -> statisDataStore.myCategoryData.first()
-//                    else -> emptyList()
-//                }
-//                Log.d("저장된내용", "저장된 데이터: $products")
-//            } else {
-//                Log.e("에러", "데이터 없음")
-//            }
-//        } else {
-//            Log.e("API_ERROR", "Error: ${response.code()}")
-//        }
-//    } catch (e: Exception) {
-//        Log.e("API_ERROR", "Error: ${e.message}")
-//    }
-//}
-//
-//suspend fun callPlatformDetailStatis(context: Context, kind: String) {
-//    val retrofit = RetrofitHelper.getRetrofitInstance(WriteService::class.java)
-//    val service = retrofit.create(StaticService::class.java)
-//    val tokenManager = TokenManager(context)
-//    val accessToken = tokenManager.getAccessToken() ?: return
-//
-//    val statisDataStore = StatisDataStore(context)
-//
-//    try {
-//        val response = withContext(Dispatchers.IO) {
-//            service.platformdetail(accessToken, kind).execute()
-//        }
-//        if (response.isSuccessful) {
-//            Log.d("API_RESPONSE_Detail", "저장된 데이터: ${response.body()}")
-//            val data = response.body()//?.data
-//            if (data != null) {
-//
-//                Log.d("API_RESPONSE_Detail", "저장된 데이터: $data")
-//                when (kind) {
-//                    "platform-whole" -> statisDataStore.saveCompanyDetailData(data)
-//                    "platform-mine" -> statisDataStore.saveMyDetailData(data)
-//                }
-//                val products = when (kind) {
-//                    "platform-whole" -> statisDataStore.companyDetailData.first()
-//                    "platform-mine" -> statisDataStore.mycompanyDetailData.first()
-//                    else -> null
-//                }
-//                Log.d("저장된내용", "저장된 데이터: $products")
-//            } else {
-//                Log.e("에러", "데이터 없음")
-//            }
-//        } else {
-//            Log.e("API_ERROR", "Error: ${response.code()}")
-//        }
-//    } catch (e: Exception) {
-//        Log.e("API_ERROR", "Error: ${e.message}")
-//    }
-//}
-//
-//suspend fun callCategoryDetailStatis(context: Context, kind: String) {
-//    val retrofit = RetrofitHelper.getRetrofitInstance(WriteService::class.java)
-//    val service = retrofit.create(StaticService::class.java)
-//    val tokenManager = TokenManager(context)
-//    val accessToken = tokenManager.getAccessToken() ?: return
-//
-//    val statisDataStore = StatisDataStore(context)
-//
-//    try {
-//        val response = withContext(Dispatchers.IO) {
-//            service.categorydetail(accessToken, kind).execute()
-//        }
-//        if (response.isSuccessful) {
-//            val data = response.body()
-//            if (data != null) {
-//                Log.d("API_RESPONSE", "저장된 데이터: $data")
-//                when (kind) {
-//                    "category-whole" -> statisDataStore.saveCategoryDetailData(data)
-//                    "category-mine" -> statisDataStore.saveMyCategoryDetailData(data)
-//                }
-//                val products = when (kind) {
-//                    "category-whole" -> statisDataStore.categoryDetailData.first()
-//                    "category-mine" -> statisDataStore.mycategoryDetailData.first()
-//                    else -> null
-//                }
-//                Log.d("저장된내용", "저장된 데이터: $products")
-//            } else {
-//                Log.e("에러", "데이터 없음")
-//            }
-//        } else {
-//            Log.e("API_ERROR", "Error: ${response.code()}")
-//        }
-//    } catch (e: Exception) {
-//        Log.e("API_ERROR", "Error: ${e.message}")
-//    }
-//}
+package com.example.digital_contest.Chart
+
+import android.content.Context
+import android.util.Log
+import com.example.digital_contest.API.APIRetrofit.retrofit
+import com.example.digital_contest.API.Data.StatisDataStore
+import com.example.digital_contest.Login.TokenManager
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+
+// 플랫폼 통계 호출
+suspend fun callPlatformStatis(context: Context, kind: String) {
+    val dataStore = StatisDataStore(context)
+    fetchAndSave(
+        context = context,
+        apiCall = { service, token ->
+            service.platformStatis(token, kind).execute()
+        },
+        onSuccess = { data ->
+            when (kind) {
+                "platform-whole" -> dataStore.saveTotalData(data.data)
+                "platform-mine" -> dataStore.saveMyData(data.data)
+            }
+        },
+        logTag = "PlatformStatis"
+    )
+}
+
+// 카테고리 통계 호출
+suspend fun callCategoryStatis(context: Context, kind: String) {
+    val dataStore = StatisDataStore(context)
+    fetchAndSave(
+        context = context,
+        apiCall = { service, token ->
+            service.categoryStatis(token, kind).execute()
+        },
+        onSuccess = { data ->
+            when (kind) {
+                "category-whole" -> dataStore.saveTotalCategoryData(data.data)
+                "category-mine" -> dataStore.saveMyCategoryData(data.data)
+            }
+        },
+        logTag = "CategoryStatis"
+    )
+}
+
+// 플랫폼 상세 통계 호출
+suspend fun callPlatformDetailStatis(context: Context, kind: String) {
+    val dataStore = StatisDataStore(context)
+    fetchAndSaveDetail(
+        context = context,
+        apiCall = { service, token ->
+            service.platformdetail(token, kind).execute()
+        },
+        onSuccess = { data ->
+            when (kind) {
+                "platform-whole" -> dataStore.saveCompanyDetailData(data)
+                "platform-mine" -> dataStore.saveMyCompanyDetailData(data)
+            }
+        },
+        logTag = "PlatformDetail"
+    )
+}
+
+// 카테고리 상세 통계 호출
+suspend fun callCategoryDetailStatis(context: Context, kind: String) {
+    val dataStore = StatisDataStore(context)
+    fetchAndSaveDetail(
+        context = context,
+        apiCall = { service, token ->
+            service.categorydetail(token, kind).execute()
+        },
+        onSuccess = { data ->
+            when (kind) {
+                "category-whole" -> dataStore.saveCategoryDetailData(data)
+                "category-mine" -> dataStore.saveMyCategoryDetailData(data)
+            }
+        },
+        logTag = "CategoryDetail"
+    )
+}
+
+
+private suspend fun <T> fetchAndSave(
+    context: Context,
+    apiCall: (StaticService, String) -> retrofit2.Response<T>,
+    onSuccess: suspend (T) -> Unit,
+    logTag: String
+) {
+    val tokenManager = TokenManager(context)
+    val token = tokenManager.getAccessToken() ?: run {
+        Log.e(logTag, "토큰 없음")
+        return
+    }
+
+    try {
+        val service = retrofit.create(StaticService::class.java)
+        val response = withContext(Dispatchers.IO) {
+            apiCall(service, token)
+        }
+        if (response.isSuccessful) {
+            response.body()?.let { data ->
+                onSuccess(data)
+                Log.d(logTag, "성공")
+            } ?: Log.e(logTag, "데이터 없음")
+        } else {
+            Log.e(logTag, "에러: ${response.code()}")
+        }
+    } catch (e: Exception) {
+        Log.e(logTag, "예외: ${e.message}")
+    }
+}
+
+private suspend fun <T> fetchAndSaveDetail(
+    context: Context,
+    apiCall: (StaticService, String) -> retrofit2.Response<T>,
+    onSuccess: suspend (T) -> Unit,
+    logTag: String
+) {
+    fetchAndSave(context, apiCall, onSuccess, logTag)
+}
+
+
