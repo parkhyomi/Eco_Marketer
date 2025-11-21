@@ -1,4 +1,4 @@
-//package com.example.digital_contest.API.Static
+package com.example.digital_contest.Chart//package com.example.digital_contest.API.Static
 //
 //import com.example.digital_contest.API.CategoryDetail
 //import com.example.digital_contest.API.CategoryStatisResponse
