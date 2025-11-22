@@ -229,7 +229,7 @@ fun BottomNavigationBar(
                 title = "통계",
                 navBarHeight = navBarHeight,
                 isSelected = currentRoute == "stats",
-                onClick = { /* TODO: 통계로 이동 */ }
+                onClick = { navController.navigate("stats") { popUpTo("main"){inclusive = false} } }
             )
             NavigationItem(
                 iconRes = R.drawable.price_symbol,

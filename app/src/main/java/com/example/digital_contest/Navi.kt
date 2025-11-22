@@ -9,6 +9,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.digital_contest.Chart.StatsScreen
 import com.example.digital_contest.Login.LoginView
 import com.example.digital_contest.Main.MainView
 import com.example.digital_contest.Mypage.MyPageScreen
@@ -63,6 +64,11 @@ fun NavigationGraph(
         composable("write") {
             WriteView(navController= navController)
         }
+
+        //시세 화면
+         composable("stats") {
+             StatsScreen(navController = navController)
+         }
 
         // 마이페이지
         composable("mypage") {
