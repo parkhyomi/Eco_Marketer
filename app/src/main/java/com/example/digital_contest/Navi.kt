@@ -12,6 +12,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.digital_contest.Chart.StatsScreen
 import com.example.digital_contest.Login.LoginView
 import com.example.digital_contest.Main.MainView
+import com.example.digital_contest.Market_Price.MarketScreen
 import com.example.digital_contest.Mypage.MyPageScreen
 import com.example.digital_contest.Write.WriteView
 import com.example.digital_contest.onboarding.Onboarding
@@ -31,8 +32,7 @@ fun AppNavigation() {
     NavigationGraph(
         navController = navController,
         startDestination =
-            "main"
-//            startDestination
+            startDestination
     )
 }
 
@@ -65,9 +65,14 @@ fun NavigationGraph(
             WriteView(navController= navController)
         }
 
-        //시세 화면
+        //통계 화면
          composable("stats") {
              StatsScreen(navController = navController)
+         }
+
+        //시세 화면
+         composable("market") {
+             MarketScreen(navController = navController)
          }
 
         // 마이페이지

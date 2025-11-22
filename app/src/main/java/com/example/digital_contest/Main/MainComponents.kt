@@ -236,7 +236,7 @@ fun BottomNavigationBar(
                 title = "시세",
                 navBarHeight = navBarHeight,
                 isSelected = currentRoute == "market",
-                onClick = { /* TODO: 시세로 이동 */ }
+                onClick = { navController.navigate("market") { popUpTo("main"){inclusive = false} } }
             )
             NavigationItem(
                 iconRes = R.drawable.mypage_symbol,
