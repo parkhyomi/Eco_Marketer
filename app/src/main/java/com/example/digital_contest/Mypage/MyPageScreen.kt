@@ -28,6 +28,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.digital_contest.Login.AuthDataStore
+import com.example.digital_contest.Login.TokenManager
 import com.example.digital_contest.Main.BottomNavigationBar
 import kotlinx.coroutines.launch
 import kotlin.math.abs
@@ -41,6 +42,8 @@ fun MyPageScreen(
 ) {
     val context = LocalContext.current
     val authDataStore = remember { AuthDataStore(context) }
+    val tokenManager = remember { TokenManager(context) }
+    val scope = rememberCoroutineScope()
     val viewModel: MyPageViewModel = viewModel(
         factory = MyPageViewModelFactory(context, authDataStore)
     )
@@ -81,8 +84,14 @@ fun MyPageScreen(
             UserInfoSection(
                 nickname = nickname.ifEmpty { "사용자" },
                 onLogout = {
-                    navController.navigate("login") {
-                        popUpTo("mypage") { inclusive = true }
+                    scope.launch {
+                        // TokenManager를 통해 로그아웃 (API 호출 + 로컬 데이터 삭제)
+                        tokenManager.logout()
+
+                        // 로그인 화면으로 이동
+                        navController.navigate("login") {
+                            popUpTo(0) { inclusive = true }
+                        }
                     }
                 }
             )
@@ -500,42 +509,3 @@ private fun EmptyProductState() {
         }
     }
 }
-
-/**
- * Preview
- */
-@Preview(showBackground = true)
-@Composable
-fun MyPageScreenPreview() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFFF2F2F7))
-    ) {
-        UserInfoSection(
-            nickname = "에코마케터",
-            onLogout = {}
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        ) {
-            StaticProductCard(
-                product = ProductData(
-                    productId = 1,
-                    product = "친환경 대나무 칫솔 세트",
-                    productCategory = "생활용품",
-                    imageUrl = "",
-                    createdAt = "2025-11-20",
-                    company = listOf("에코컴퍼니"),
-                    price = 15000
-                )
-            )
-        }
-    }
-}
-

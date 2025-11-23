@@ -2,12 +2,9 @@ package com.example.digital_contest.Mypage
 
 import android.content.Context
 import android.util.Log
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
-import androidx.datastore.preferences.preferencesDataStore
 import com.example.digital_contest.API.APIRetrofit
 import com.example.digital_contest.Login.AuthDataStore
 import kotlinx.coroutines.Dispatchers
@@ -36,9 +33,9 @@ class MyPageRepositoryImpl(
     private val apiService: MyPageApiInterface = APIRetrofit.createService()
     private val json = Json { ignoreUnknownKeys = true }
 
-    // DataStore 접근
-    private val Context.productDataStore: DataStore<Preferences> by preferencesDataStore(name = "my_product_manager")
-    private val Context.userDataStore: DataStore<Preferences> by preferencesDataStore(name = "name_data")
+    // DataStore 싱글톤 접근
+    private val productDataStore = MyPageDataStore.getProductDataStore(context)
+    private val userDataStore = MyPageDataStore.getUserDataStore(context)
 
     companion object {
         private val NICKNAME_KEY = stringPreferencesKey("nickname")
@@ -51,15 +48,16 @@ class MyPageRepositoryImpl(
             val response = apiService.getProducts("Bearer $token", status.toApiValue()).awaitResponse()
 
             if (response.isSuccessful) {
-                val products = response.body()?.let { listOf(it) } ?: emptyList()
+                val products = response.body()?.data ?: emptyList()
+                Log.d("Repository", "API success: ${products.size} products received")
                 saveProductsToLocal(products, status)
                 products.map { ProductData.fromProduct(it) }
             } else {
-                Log.e("Repository", "API failed, loading from cache")
+                Log.e("Repository", "API failed with code: ${response.code()}, loading from cache")
                 getProductsFromLocal(status)
             }
         } catch (e: Exception) {
-            Log.e("Repository", "Error: ${e.message}, loading from cache")
+            Log.e("Repository", "Error: ${e.message}", e)
             getProductsFromLocal(status)
         }
     }
@@ -81,7 +79,7 @@ class MyPageRepositoryImpl(
             val response = apiService.getUserNickname("Bearer $token").awaitResponse()
 
             if (response.isSuccessful) {
-                val nickname = response.body()?.nickname ?: "사용자"
+                val nickname = response.body()?.data?.nickname ?: "사용자"
                 saveUserNickname(nickname)
                 nickname
             } else {
@@ -94,7 +92,7 @@ class MyPageRepositoryImpl(
     }
 
     override suspend fun saveUserNickname(nickname: String) {
-        context.userDataStore.edit { preferences ->
+        userDataStore.edit { preferences ->
             preferences[NICKNAME_KEY] = nickname
         }
     }
@@ -103,10 +101,9 @@ class MyPageRepositoryImpl(
         return 0
     }
 
-
     private suspend fun saveProductsToLocal(products: List<Product>, status: ProductStatus) {
         withContext(Dispatchers.IO) {
-            context.productDataStore.edit { preferences ->
+            productDataStore.edit { preferences ->
                 val stateKey = getStateKey(status)
                 val productStrings = products.map { json.encodeToString(it) }.toSet()
                 preferences[stringSetPreferencesKey("${stateKey}_products")] = productStrings
@@ -115,7 +112,7 @@ class MyPageRepositoryImpl(
     }
 
     private suspend fun getProductsFromLocal(status: ProductStatus): List<ProductData> {
-        return context.productDataStore.data.map { preferences ->
+        return productDataStore.data.map { preferences ->
             val stateKey = getStateKey(status)
             val productStrings = preferences[stringSetPreferencesKey("${stateKey}_products")] ?: emptySet()
             productStrings.mapNotNull { productString ->
@@ -129,7 +126,7 @@ class MyPageRepositoryImpl(
     }
 
     private suspend fun getNicknameFromLocal(): String {
-        return context.userDataStore.data.map { preferences ->
+        return userDataStore.data.map { preferences ->
             preferences[NICKNAME_KEY] ?: "사용자"
         }.first()
     }

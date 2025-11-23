@@ -1,5 +1,6 @@
 package com.example.digital_contest.Mypage
 
+import com.google.gson.annotations.SerializedName
 import kotlinx.serialization.Serializable
 import retrofit2.Call
 import retrofit2.http.Body
@@ -14,18 +15,28 @@ data class ProductStatusRequest(
 )
 
 data class UserNicknameResponse(
+    val data: UserNicknameRequest
+)
+
+data class UserNicknameRequest(
+    @SerializedName("nickname")
     val nickname: String
+)
+
+@Serializable
+data class ProductResponse(
+    val data: List<Product>
 )
 
 @Serializable
 data class Product(
     val productId: Int,
-    val product: String,
-    val productCategory: String,
-    val imageUrl: String,
-    val createdAt: String,
-    val company: List<String>,
-    val price: Int
+    val product: String?,
+    val productCategory: String?,
+    val imageUrl: String?,
+    val createdAt: String?,
+    val company: List<String>?,
+    val price: Int?
 )
 
 data class ProductData(
@@ -40,12 +51,12 @@ data class ProductData(
     companion object {
         fun fromProduct(product: Product): ProductData = ProductData(
             productId = product.productId,
-            product = product.product,
-            productCategory = product.productCategory,
-            imageUrl = product.imageUrl,
-            createdAt = product.createdAt,
-            company = product.company,
-            price = product.price
+            product = product.product ?: "알 수 없음",
+            productCategory = product.productCategory ?: "기타",
+            imageUrl = product.imageUrl ?: "",
+            createdAt = product.createdAt ?: "",
+            company = product.company ?: emptyList(),
+            price = product.price ?: 0
         )
     }
 }
@@ -64,19 +75,19 @@ enum class ProductStatus {
 }
 
 interface MyPageApiInterface {
-    @PATCH("/api/product/status")
+    @PATCH("/product/status")
     fun updateProductStatus(
         @Header("Authorization") accessToken: String,
         @Body request: ProductStatusRequest
     ): Call<Void>
 
-    @GET("/api/product")
+    @GET("/product")
     fun getProducts(
         @Header("Authorization") accessToken: String,
         @Query("status") status: Boolean?
-    ): Call<Product>
+    ): Call<ProductResponse>
 
-    @GET("/api/user/nickname")
+    @GET("/user/nickname")
     fun getUserNickname(
         @Header("Authorization") accessToken: String
     ): Call<UserNicknameResponse>
