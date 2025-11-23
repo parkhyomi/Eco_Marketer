@@ -5,11 +5,12 @@ import com.example.digital_contest.BuildConfig
 
 
 data class Platform(
-    val name: String,           // 플랫폼 이름
-    val deepLink: String,       // 앱 딥링크 URL
-    val webUrl: String,         // 웹사이트 URL
-    val buttonColor: Color,     // 버튼 텍스트 색상
-    val displayText: String     // 버튼에 표시될 텍스트
+    val name: String,
+    val deepLink: String,
+    val webUrl: String,
+    val packageName: String,
+    val buttonColor: Color,
+    val displayText: String
 )
 
 object PlatformConfig {
@@ -19,6 +20,7 @@ object PlatformConfig {
         name = "중고나라",
         deepLink = "${BuildConfig.JOONGNA_SCHEME}://?applink=main",
         webUrl = "https://${BuildConfig.JOONGNA}/",
+        packageName = "com.fm.joonggonara",
         buttonColor = Color(0xFF14AE5C),
         displayText = "중고나라 글쓰러가기"
     )
@@ -28,6 +30,7 @@ object PlatformConfig {
         name = "당근",
         deepLink = "${BuildConfig.DAANGN_SCHEME}://",
         webUrl = "https://${BuildConfig.DAANGN}/",
+        packageName = "com.towneers.www",
         buttonColor = Color(0xFFFF8329),
         displayText = "당근 글쓰러가기"
     )
@@ -37,6 +40,7 @@ object PlatformConfig {
         name = "번개장터",
         deepLink = "${BuildConfig.BUNGANG_SCHEME}:/",
         webUrl = "https://${BuildConfig.BUNGANG}",
+        packageName = "com.bunjang.bundroid",
         buttonColor = Color(0xFFFF0000),
         displayText = "번개장터 글쓰러가기"
     )

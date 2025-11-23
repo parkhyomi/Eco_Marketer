@@ -107,9 +107,12 @@ class WriteViewModel(
                     category = _selectedCategory.value,
                     concept = _selectedConcept.value
                 ).onSuccess { introduceText ->
+                    Log.d("WriteViewModel", "Generated text received: $introduceText")
                     _generatedText.value = introduceText
+                    Log.d("WriteViewModel", "Generated text updated to: ${_generatedText.value}")
                     _writeUiState.value = WriteUiState.Success(introduceText)
                 }.onFailure { exception ->
+                    Log.e("WriteViewModel", "Upload failed", exception)
                     _writeUiState.value = WriteUiState.Error(exception.message ?: "오류 발생")
                 }
             } catch (e: Exception) {

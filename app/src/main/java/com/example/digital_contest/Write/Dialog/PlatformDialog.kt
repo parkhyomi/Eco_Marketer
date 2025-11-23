@@ -43,15 +43,23 @@ fun PlatformDialog(
     val launcher = rememberLauncherForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
+        Log.d("PlatformDialog", "외부 앱에서 복귀 - ResultCode: ${result.resultCode}")
         when (result.resultCode) {
             Activity.RESULT_OK -> {
                 Log.d("PlatformDialog", "외부 앱에서 정상 복귀")
             }
+            Activity.RESULT_CANCELED -> {
+                Log.d("PlatformDialog", "외부 앱에서 취소로 복귀")
+            }
             else -> {
-                Log.d("PlatformDialog", "외부 앱에서 취소 또는 에러로 복귀")
+                Log.d("PlatformDialog", "외부 앱에서 기타 상태로 복귀: ${result.resultCode}")
             }
         }
-        navController.navigate("main")
+        // 다이얼로그를 닫고 메인으로 이동
+        dismiss()
+        navController.navigate("main") {
+            popUpTo("main") { inclusive = true }
+        }
     }
 
     val platformLauncher = AndroidPlatformLauncher(context, launcher)

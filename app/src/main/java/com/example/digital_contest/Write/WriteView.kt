@@ -65,12 +65,12 @@ fun WriteView(navController: NavHostController) {
     // ViewModel의 상태 구독
     val writeUiState by viewModel.writeUiState.collectAsState()
     val productPlusState by viewModel.productPlusState.collectAsState()
-    val title by viewModel.title.collectAsState()
-    val price by viewModel.price.collectAsState()
-    val selectedPlatform by viewModel.selectedPlatform.collectAsState()
-    val selectedCategory by viewModel.selectedCategory.collectAsState()
-    val selectedConcept by viewModel.selectedConcept.collectAsState()
-    val generatedText by viewModel.generatedText.collectAsState()
+    val title by viewModel.title.collectAsState(initial = "")
+    val price by viewModel.price.collectAsState(initial = "")
+    val selectedPlatform by viewModel.selectedPlatform.collectAsState(initial = "")
+    val selectedCategory by viewModel.selectedCategory.collectAsState(initial = "")
+    val selectedConcept by viewModel.selectedConcept.collectAsState(initial = "")
+    val generatedText by viewModel.generatedText.collectAsState(initial = "")
 
     val showPlatformSheet = remember { mutableStateOf(false) }
     val showCategorySheet = remember { mutableStateOf(false) }
@@ -89,13 +89,18 @@ fun WriteView(navController: NavHostController) {
             }
 
             is WriteUiState.Success -> {
-                // 성공 처리는 자동으로 UI에 반영됨
+                Toast.makeText(context, "게시글이 생성되었습니다", Toast.LENGTH_SHORT).show()
+                viewModel.resetState()
             }
 
             else -> {}
         }
     }
 
+    // generatedText 변경 감지 (디버그용)
+    LaunchedEffect(generatedText) {
+        android.util.Log.d("WriteView", "Generated text changed: $generatedText")
+    }
     LaunchedEffect(productPlusState) {
         when (val state = productPlusState) {
             is ProductPlusState.Success -> {
@@ -269,7 +274,7 @@ fun WriteView(navController: NavHostController) {
                 // 생성된 글
                 item {
                     Spacer(modifier = Modifier.height(16.dp))
-                    if (generatedText.isNotEmpty()) {
+                    if (!generatedText.isNullOrEmpty()) {
                         GeneratedTextBox(
                             text = generatedText,
                             onCopyClick = {
@@ -284,7 +289,7 @@ fun WriteView(navController: NavHostController) {
                 // 버튼
                 item {
                     ActionButtons(
-                        isGenerated = generatedText.isNotEmpty(),
+                        isGenerated = !generatedText.isNullOrEmpty(),
                         onGenerateClick = { viewModel.uploadProduct() },
                         onRegenerateClick = { viewModel.uploadProduct() },
                         onGoWriteClick = {

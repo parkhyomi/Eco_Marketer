@@ -1,5 +1,7 @@
 package com.example.digital_contest.Write
 
+import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.Serializable
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
@@ -14,7 +16,9 @@ data class IntroduceCreateResponse(
 )
 
 data class IntroduceData(
+    @SerializedName("introduceText")
     val introduceText: String,
+    @SerializedName("price")
     val price: Int
 )
 
@@ -27,7 +31,7 @@ data class IntroducePlusResponse(
 interface WriteService {
     // 게시글 생성 API
     @Multipart
-    @POST("/api/introduce/text")
+    @POST("/introduce/text")
     suspend fun uploadProduct(
         @Header("Authorization") token: String,
         @Part files: MultipartBody.Part,
@@ -39,7 +43,7 @@ interface WriteService {
 
     // 물품 등록 API
     @Multipart
-    @POST("/api/product")
+    @POST("/product")
     suspend fun productplus(
         @Header("Authorization") token: String,
         @Part files: MultipartBody.Part,
