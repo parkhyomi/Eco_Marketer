@@ -75,6 +75,23 @@ class TokenManager(private val context: Context) {
     }
 
     /**
+     * 로그아웃 (API 호출 + 토큰 삭제)
+     */
+    suspend fun logout(): Boolean {
+        return try {
+            val accessToken = getAccessToken()
+            if (!accessToken.isNullOrEmpty()) {
+                repository.logout(accessToken)
+            }
+            clearAllTokens()
+            true
+        } catch (e: Exception) {
+            clearAllTokens()
+            false
+        }
+    }
+
+    /**
      * 모든 토큰 삭제 (DataStore + SharedPreferences)
      */
     private suspend fun clearAllTokens() {
