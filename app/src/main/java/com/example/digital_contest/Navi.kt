@@ -31,8 +31,7 @@ fun AppNavigation() {
 
     NavigationGraph(
         navController = navController,
-        startDestination =
-            startDestination
+        startDestination = startDestination
     )
 }
 
@@ -62,22 +61,22 @@ fun NavigationGraph(
 
         // 글쓰기 화면
         composable("write") {
-            WriteView(navController= navController)
+            WriteView(navController = navController)
         }
 
-        //통계 화면
-         composable("stats") {
-             StatsScreen(navController = navController)
-         }
+        // 통계 화면
+        composable("stats") {
+            StatsScreen(navController = navController)
+        }
 
-        //시세 화면
-         composable("market") {
-             MarketScreen(navController = navController)
-         }
+        // 시세 화면
+        composable("market") {
+            MarketScreen(navController = navController)
+        }
 
         // 마이페이지
         composable("mypage") {
-             MyPageScreen(navController = navController)
+            MyPageScreen(navController = navController)
         }
     }
 }
