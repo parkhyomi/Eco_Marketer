@@ -9,25 +9,25 @@ import retrofit2.http.Path
 
 // 통합된 Retrofit 서비스 인터페이스
 interface StaticService {
-    @GET("/api/satisfaction/platform/{kind}")
+    @GET("/satisfaction/platform/{kind}")
     fun platformStatis(
         @Header("Authorization") token: String,
         @Path("kind") kind: String
     ): Call<StatisResponse>
 
-    @GET("/api/satisfaction/category/{kind}")
+    @GET("/satisfaction/category/{kind}")
     fun categoryStatis(
         @Header("Authorization") token: String,
         @Path("kind") kind: String
     ): Call<StatisResponse>
 
-    @GET("/api/satisfaction/platform/detail/{kind}")
+    @GET("/satisfaction/platform/detail/{kind}")
     fun platformdetail(
         @Header("Authorization") token: String,
         @Path("kind") kind: String
     ): Call<StatisDetail>
 
-    @GET("/api/satisfaction/category/detail/{kind}")
+    @GET("/satisfaction/category/detail/{kind}")
     fun categorydetail(
         @Header("Authorization") token: String,
         @Path("kind") kind: String

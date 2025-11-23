@@ -17,7 +17,7 @@ data class MarketPriceData(
 )
 
 interface MarketPriceService {
-    @GET("/api/quotation")
+    @GET("/quotation")
     fun getMarketPrices(
         @Header("Authorization") accessToken: String,
         @Query("item") query: String
