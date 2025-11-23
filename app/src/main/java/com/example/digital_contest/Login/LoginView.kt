@@ -29,7 +29,6 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.NavOptions
 import com.example.digital_contest.R
 import kotlinx.coroutines.launch
 
@@ -47,24 +46,37 @@ fun LoginView(
     LaunchedEffect(uiState) {
         when (val state = uiState) {
             is LoginUiState.Success -> {
-                // 로그인 성공 - 토큰 저장 후 메인 화면으로 이동
-                scope.launch {
-                    authDataStore.saveLoginData(
-                        accessToken = state.loginData.accessToken,
-                        refreshToken = state.loginData.refreshToken,
-                        role = state.loginData.role
-                    )
-                    Toast.makeText(context, "로그인 성공!", Toast.LENGTH_SHORT).show()
-                    // 메인 화면으로 이동
-                    navController.navigate("main", NavOptions.Builder()
-                        .setPopUpTo("login", inclusive = true)
-                        .build()
-                    )
+                // 로그인 성공 - DataStore와 SharedPreferences 모두에 토큰 저장
+                val loginData = state.loginData
+                if (loginData.accessToken != null && loginData.refreshToken != null && loginData.expiresIn != null) {
+                    scope.launch {
+                        android.util.Log.d("LoginView", "토큰 저장 시작...")
+
+                        authDataStore.saveLoginData(
+                            accessToken = loginData.accessToken,
+                            refreshToken = loginData.refreshToken,
+                            expiresIn = loginData.expiresIn.toString()
+                        )
+                        android.util.Log.d("LoginView", "DataStore 저장 완료")
+
+                        val sharedPreferences = context.getSharedPreferences("AppPreferences", android.content.Context.MODE_PRIVATE)
+                        sharedPreferences.edit().apply {
+                            putString("accessToken", loginData.accessToken)
+                            putString("refreshToken", loginData.refreshToken)
+                            putString("expiresIn", loginData.expiresIn.toString())
+                            apply()
+                        }
+
+                        navController.navigate("main") {
+                            popUpTo("login") { inclusive = true }
+                        }
+                    }
+                } else {
+                    viewModel.resetUiState()
                 }
             }
             is LoginUiState.Error -> {
-                Toast.makeText(context, state.message, Toast.LENGTH_LONG).show()
-                viewModel.resetUiState()
+               viewModel.resetUiState()
             }
             else -> {}
         }

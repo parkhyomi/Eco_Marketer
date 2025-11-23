@@ -15,7 +15,7 @@ class AuthDataStore(private val context: Context) {
     companion object {
         private val ACCESS_TOKEN_KEY = stringPreferencesKey("access_token")
         private val REFRESH_TOKEN_KEY = stringPreferencesKey("refresh_token")
-        private val USER_ROLE_KEY = stringPreferencesKey("user_role")
+        private val EXPIRES_IN_KEY = stringPreferencesKey("expiresIn")
     }
 
     /**
@@ -42,11 +42,11 @@ class AuthDataStore(private val context: Context) {
     /**
      * 로그인 데이터 저장
      */
-    suspend fun saveLoginData(accessToken: String, refreshToken: String, role: String) {
+    suspend fun saveLoginData(accessToken: String, refreshToken: String, expiresIn: String) {
         context.authDataStore.edit { preferences ->
             preferences[ACCESS_TOKEN_KEY] = accessToken
             preferences[REFRESH_TOKEN_KEY] = refreshToken
-            preferences[USER_ROLE_KEY] = role
+            preferences[EXPIRES_IN_KEY] = expiresIn
         }
     }
 

@@ -1,13 +1,19 @@
 package com.example.digital_contest.Login
 
-data class LoginBackendResponse(
-    val data: LoginData
-)
+import com.google.gson.annotations.SerializedName
 
 data class LoginData(
-    val accessToken: String,
-    val refreshToken: String,
-    val role: String
+    @SerializedName("accessToken")
+    val accessToken: String?,
+    @SerializedName("refreshToken")
+    val refreshToken: String?,
+    @SerializedName("expiresIn")
+    val expiresIn: Int?
+)
+
+data class RefreshTokenRequest(
+    @SerializedName("refreshToken")
+    val refreshToken: String
 )
 
 sealed class LoginResult {

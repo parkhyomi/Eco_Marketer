@@ -1,10 +1,11 @@
 package com.example.digital_contest.Login
 
+import android.util.Log
 import com.example.digital_contest.API.APIRetrofit
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import retrofit2.Call
-import retrofit2.awaitResponse
+import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.Header
 import retrofit2.http.POST
@@ -12,28 +13,28 @@ import retrofit2.http.POST
 interface LoginApiService {
 
     // 카카오 토큰으로 백엔드 로그인
-    @POST("/api/auth/login/kakao")
-    fun loginWithKakao(
+    @POST("/auth/login/kakao")
+    suspend fun loginWithKakao(
         @Header("Authorization") accessToken: String
-    ): Call<LoginBackendResponse>
+    ): Response<LoginData>
 
-    // 액세스 토큰 재발급
+    // 액세스 토큰 재발급 (Request Body 방식)
     @POST("/auth/token-reissue")
-    fun reissueToken(
-        @Header("Authorization") accessToken: String,
-        @Header("refresh") refreshToken: String
-    ): Call<LoginBackendResponse>
+    suspend fun reissueToken(
+        @Body request: RefreshTokenRequest
+    ): Response<LoginData>
 
     // 로그아웃
-    @DELETE("/api/auth/logout")
-    fun logout(
+    @DELETE("/auth/logout")
+    suspend fun logout(
         @Header("Authorization") accessToken: String
-    ): Call<Void>
+    ): Response<Void>
 }
 
 class LoginRepository {
 
     private val api: LoginApiService = APIRetrofit.createService()
+    val TAG = "KakaoLogin"
 
     /**
      * 카카오 로그인
@@ -41,15 +42,23 @@ class LoginRepository {
     suspend fun loginWithKakao(kakaoAccessToken: String): LoginResult {
         return withContext(Dispatchers.IO) {
             try {
-                val response = api.loginWithKakao("Bearer $kakaoAccessToken").awaitResponse()
+
+                val response = api.loginWithKakao(kakaoAccessToken)
 
                 if (response.isSuccessful && response.body() != null) {
-                    LoginResult.Success(response.body()!!.data)
+                    val loginData = response.body()!!
+
+                    Log.d(TAG, "로그인 성공")
+                    LoginResult.Success(loginData)
                 } else {
-                    LoginResult.Error("로그인 실패: ${response.code()}")
+                    val errorBody = response.errorBody()?.string() ?: "알 수 없는 오류"
+                    Log.e(TAG, "로그인 실패 (${response.code()}): $errorBody")
+                    LoginResult.Error("로그인 실패 (${response.code()}): $errorBody")
                 }
-            } catch (e: Exception) {
-                LoginResult.Error("네트워크 오류: ${e.message}")
+            }catch (e: Exception) {
+                Log.e(TAG, "네트워크 오류: ${e.javaClass.simpleName} - ${e.message}", e)
+                e.printStackTrace()
+                LoginResult.Error("네트워크 오류: ${e.javaClass.simpleName} - ${e.message}")
             }
         }
     }
@@ -57,20 +66,23 @@ class LoginRepository {
     /**
      * 토큰 재발급
      */
-    suspend fun reissueToken(accessToken: String, refreshToken: String): LoginResult {
+    suspend fun reissueToken(refreshToken: String): LoginResult {
         return withContext(Dispatchers.IO) {
             try {
-                val response = api.reissueToken(
-                    "Bearer $accessToken",
-                    "Bearer $refreshToken"
-                ).awaitResponse()
+                Log.d(TAG, "토큰 재발급 시작")
+                Log.d(TAG, "RefreshToken 길이: ${refreshToken.length}")
+                val response = api.reissueToken(RefreshTokenRequest(refreshToken))
 
                 if (response.isSuccessful && response.body() != null) {
-                    LoginResult.Success(response.body()!!.data)
+                    Log.d(TAG, "토큰 재발급 성공")
+                    LoginResult.Success(response.body()!!)
                 } else {
-                    LoginResult.Error("토큰 재발급 실패: ${response.code()}")
+                    val errorBody = response.errorBody()?.string() ?: "알 수 없는 오류"
+                    Log.e(TAG, "토큰 재발급 실패 (${response.code()}): $errorBody")
+                    LoginResult.Error("토큰 재발급 실패 (${response.code()}): $errorBody")
                 }
             } catch (e: Exception) {
+                Log.e(TAG, "토큰 재발급 오류: ${e.javaClass.simpleName} - ${e.message}", e)
                 LoginResult.Error("토큰 재발급 오류: ${e.message}")
             }
         }
@@ -82,7 +94,7 @@ class LoginRepository {
     suspend fun logout(accessToken: String): Boolean {
         return withContext(Dispatchers.IO) {
             try {
-                val response = api.logout("Bearer $accessToken").awaitResponse()
+                val response = api.logout("Bearer $accessToken")
                 response.isSuccessful
             } catch (e: Exception) {
                 false

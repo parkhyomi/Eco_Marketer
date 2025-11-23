@@ -8,10 +8,11 @@ import kotlinx.coroutines.flow.first
  * 2. 토큰 자동 갱신
  * 3. 만료된 토큰 정리
  */
-class TokenManager(context: Context) {
+class TokenManager(private val context: Context) {
 
     private val authDataStore = AuthDataStore(context)
     private val repository = LoginRepository.getInstance()
+    private val sharedPreferences = context.getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
 
     suspend fun checkAndRefreshToken(): Boolean {
         // 저장된 토큰 가져오기
@@ -25,25 +26,34 @@ class TokenManager(context: Context) {
 
         // 토큰 재발급 시도
         return try {
-            when (val result = repository.reissueToken(accessToken, refreshToken)) {
+            when (val result = repository.reissueToken(refreshToken)) {
                 is LoginResult.Success -> {
-                    // 새 토큰 저장
+                    // 1. DataStore에 새 토큰 저장
                     authDataStore.saveLoginData(
-                        accessToken = result.loginData.accessToken,
-                        refreshToken = result.loginData.refreshToken,
-                        role = result.loginData.role
+                        accessToken = result.loginData.accessToken!!,
+                        refreshToken = result.loginData.refreshToken!!,
+                        expiresIn = result.loginData.expiresIn!!.toString()
                     )
+
+                    // 2. SharedPreferences에도 저장 (하위 호환성)
+                    sharedPreferences.edit().apply {
+                        putString("accessToken", result.loginData.accessToken)
+                        putString("refreshToken", result.loginData.refreshToken)
+                        putString("expiresIn", result.loginData.expiresIn.toString())
+                        apply()
+                    }
+
                     true
                 }
                 is LoginResult.Error -> {
                     // 재발급 실패 - 토큰 만료, 로그인 필요
-                    authDataStore.clear()
+                    clearAllTokens()
                     false
                 }
             }
         } catch (e: Exception) {
             // 예외 발생 시 토큰 삭제
-            authDataStore.clear()
+            clearAllTokens()
             false
         }
     }
@@ -62,6 +72,14 @@ class TokenManager(context: Context) {
      */
     suspend fun getAccessToken(): String? {
         return authDataStore.accessToken.first()
+    }
+
+    /**
+     * 모든 토큰 삭제 (DataStore + SharedPreferences)
+     */
+    private suspend fun clearAllTokens() {
+        authDataStore.clear()
+        sharedPreferences.edit().clear().apply()
     }
 }
 
