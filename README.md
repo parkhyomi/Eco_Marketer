@@ -34,7 +34,6 @@
   - **Data Layer**: Repository, DataSource - 데이터 접근 및 관리
 
 - **의존성 주입 (Dependency Injection)**
-  - **Hilt** 도입으로 의존성 관리 자동화
   - 테스트 용이성 향상
   - 객체 생명주기 관리 개선
 
@@ -50,7 +49,6 @@
 ## 학습 목표
 
 - Clean Architecture 및 MVVM 패턴 실전 적용
-- Hilt를 활용한 의존성 주입 패턴 학습
 - 실무 수준의 코드 구조 및 설계 경험
 - 디자인 패턴의 실제 활용 사례 이해
 - 리팩토링 프로세스 및 Best Practice 습득
@@ -61,7 +59,6 @@
 
 - **Language**: Kotlin
 - **Architecture**: MVVM + Clean Architecture
-- **DI**: Hilt
 - **Async**: Coroutines, Flow
 - **UI**: Jetpack Compose
 - **Networking**: Retrofit, OkHttp
