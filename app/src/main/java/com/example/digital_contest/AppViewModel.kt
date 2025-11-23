@@ -25,6 +25,7 @@ class AppViewModel(context: Context) : ViewModel() {
     private val onboardingDataStore = OnboardingDataStore(context)
     private val authDataStore = AuthDataStore(context)
     private val tokenManager = TokenManager(context)
+    private val sharedPreferences = context.getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
 
     private val _isTokenChecking = MutableStateFlow(true)
 
@@ -58,13 +59,19 @@ class AppViewModel(context: Context) : ViewModel() {
             return@combine "onboarding"
         }
 
-        // 로그인 안됨 → login
-        if (!isLoggedIn || isChecking) {
+        // 토큰 체크 중
+        if (isChecking) {
             return@combine "login"
         }
 
-        // 로그인 완료 → main
-        "main"
+        val hasSharedPrefToken = sharedPreferences.getString("accessToken", null)?.isNotEmpty() == true
+
+        if (isLoggedIn || hasSharedPrefToken) {
+            return@combine "main"
+        }
+        // 로그인 안됨 → login
+        "login"
+
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),

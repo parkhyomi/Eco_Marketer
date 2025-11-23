@@ -26,6 +26,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:usesCleartextTraffic ="true"
         android:theme="@style/Theme.Digital_Contest.SplashScreen">
 
         <!-- FileProvider 설정 추가 -->
@@ -45,20 +46,50 @@
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.Digital_Contest"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:usesCleartextTraffic ="true"
+            >
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <!-- 사이트 이동 -->
+
+            <!-- 중고나라 딥링크 -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" android:host="${JOONGNA}" />
+            </intent-filter>
+
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="${JOONGNA_SCHEME}" />
+            </intent-filter>
 
-                <data android:scheme="https" android:host="${JOONGNA}" />
+            <!-- 당근 딥링크 -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="https" android:host="${DAANGN}" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="${DAANGN_SCHEME}" />
+            </intent-filter>
+
+            <!-- 번개장터 딥링크 -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="https" android:host="${BUNGANG}" />
             </intent-filter>
 
@@ -66,9 +97,6 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="${JOONGNA_SCHEME}" />
-                <data android:scheme="${DAANGN_SCHEME}" />
                 <data android:scheme="${BUNGANG_SCHEME}" />
             </intent-filter>
         </activity>
