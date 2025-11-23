@@ -72,10 +72,6 @@ class MarketPriceViewModel : ViewModel() {
             }
         })
     }
-
-    fun clearSearch() {
-        _state.value = MarketPriceState()
-    }
 }
 
 

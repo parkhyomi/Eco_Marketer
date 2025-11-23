@@ -17,10 +17,6 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-/**
- * 통계 데이터 저장소 (DataStore Pattern)
- * SRP: 데이터 저장/조회만 담당
- */
 
 // DataStore 정의
 private val Context.totalCategoryDataStore: DataStore<Preferences> by preferencesDataStore(name = "total_category_data")

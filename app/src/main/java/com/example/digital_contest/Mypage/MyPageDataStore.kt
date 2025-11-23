@@ -9,9 +9,6 @@ import androidx.datastore.preferences.preferencesDataStore
 private val Context.productDataStore: DataStore<Preferences> by preferencesDataStore(name = "my_product_manager")
 private val Context.userDataStore: DataStore<Preferences> by preferencesDataStore(name = "name_data")
 
-/**
- * MyPage용 DataStore 싱글톤 접근자
- */
 object MyPageDataStore {
     fun getProductDataStore(context: Context): DataStore<Preferences> {
         return context.productDataStore
